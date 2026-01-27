@@ -15,9 +15,8 @@ export default function Settings() {
 
   // Update Logic using vite-plugin-pwa hook
   const {
-    needRefresh: [needRefresh, setNeedRefresh],
+    needRefresh: [needRefresh],
     updateServiceWorker,
-    update
   } = useRegisterSW({
     onRegistered(r) {
       console.log('SW Registered:', r);
