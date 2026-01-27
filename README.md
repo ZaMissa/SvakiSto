@@ -1,73 +1,93 @@
-# React + TypeScript + Vite
+# SvakiSto 🖥️  
+**Secure AnyDesk Client Manager | Siguran AnyDesk Menadžer Klijenata**  
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+![PWA Ready](https://img.shields.io/badge/PWA-Ready-success?style=for-the-badge&logo=pwa) ![React](https://img.shields.io/badge/React-v18-blue?style=for-the-badge&logo=react) ![Vite](https://img.shields.io/badge/Vite-Rapid-yellow?style=for-the-badge&logo=vite) ![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
 
-Currently, two official plugins are available:
+[🇬🇧 English](#english) | [🇷🇸 Srpski](#srpski)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## React Compiler
+## <a name="english"></a>🇬🇧 English
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### 🚀 Overview
+**SvakiSto** is a modern, offline-first Progressive Web App (PWA) designed to manage large lists of AnyDesk clients securely. Built for speed and privacy, it stores all your data locally in your browser using IndexedDB (Dexie.js), meaning your sensitive passwords and client lists never leave your device unless you explicitly export them.
 
-## Expanding the ESLint configuration
+### ✨ Key Features
+-   **🔐 Zero-Knowledge Privacy**: All data is stored locally. No external servers.
+-   **📂 Visual Hierarchy**: Organize clients into `Client > Object > Station` structures.
+-   **⚡ Quick Actions**: Copy passwords or launch AnyDesk with a single click.
+-   **📱 Mobile-First**: Fully responsive design with a dedicated mobile experience.
+-   **📥 Import/Export**: Securely backup your database with AES-encrypted JSON files.
+-   **🌍 Bilingual**: Instant switching between English and Serbian.
+-   **🌓 Dark Mode**: Sleek UI with automatic or manual theme switching.
+-   **🕵️ Manager Mode**: Advanced search, sorting, and bulk management.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### 🛠️ Installation (Local)
+1.  Clone the repository:
+    ```bash
+    git clone https://github.com/ZaMissa/SvakiSto.git
+    cd SvakiSto
+    ```
+2.  Install dependencies:
+    ```bash
+    npm install
+    ```
+3.  Start the development server:
+    ```bash
+    npm run dev
+    ```
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### 📦 Deployment
+This app is ready for GitHub Pages.
+1.  Build the project: `npm run build`
+2.  Deploy the `dist` folder or use the automated workflow.
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+---
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## <a name="srpski"></a>🇷🇸 Srpski
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### 🚀 Pregled
+**SvakiSto** je moderna, brza PWA aplikacija dizajnirana za bezbedno upravljanje velikim listama AnyDesk klijenata. Napravljena sa fokusom na privatnost, svi vaši podaci se čuvaju lokalno u vašem pretraživaču koristeći IndexedDB (Dexie.js). Vaše osetljive lozinke i liste klijenata nikada ne napuštaju vaš uređaj osim ako ih sami ne izvezete.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### ✨ Ključne Funkcionalnosti
+-   **🔐 Potpuna Privatnost**: Svi podaci ostaju na vašem uređaju. Nema eksternih servera.
+-   **📂 Vizuelna Hijerarhija**: Organizujte klijente kroz strukturu `Klijent > Objekat > Stanica`.
+-   **⚡ Brze Akcije**: Kopirajte lozinke ili pokrenite AnyDesk jednim klikom.
+-   **📱 Prilagođeno Mobilnim Uređajima**: Potpuno responzivan dizajn sa posebnim mobilnim prikazom.
+-   **📥 Uvoz/Izvoz**: Bezbedno pravljenje rezervnih kopija putem AES-enkriptovanih JSON fajlova.
+-   **🌍 Dvojezičnost**: Trenutno prebacivanje između Engleskog i Srpskog jezika.
+-   **🌓 Tamna Tema**: Moderan izgled sa automatskom ili ručnom promenom teme.
+-   **🕵️ Menadžer Mod**: Napredna pretraga, sortiranje i upravljanje podacima.
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+### 🛠️ Instalacija (Lokalno)
+1.  Klonirajte repozitorijum:
+    ```bash
+    git clone https://github.com/ZaMissa/SvakiSto.git
+    cd SvakiSto
+    ```
+2.  Instalirajte zavisnosti:
+    ```bash
+    npm install
+    ```
+3.  Pokrenite server:
+    ```bash
+    npm run dev
+    ```
+
+### 📦 Postavljanje (Deployment)
+Aplikacija je spremna za GitHub Pages.
+1.  Napravite build: `npm run build`
+2.  Postavite `dist` folder ili koristite automatizovani workflow.
+
+---
+
+### 🏗️ Tech Stack
+-   **Framework**: React 18 + TypeScript
+-   **Build Tool**: Vite
+-   **Styling**: TailwindCSS
+-   **Database**: Dexie.js (IndexedDB wrapper)
+-   **Encryption**: Crypto-js (AES)
+-   **Icons**: Lucide React
+
+---
+&copy; 2026 SvakiSto Development. Open Source.
