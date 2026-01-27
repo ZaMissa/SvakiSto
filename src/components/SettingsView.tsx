@@ -1,17 +1,48 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Moon, Sun, Download, Upload, RefreshCw, Trash2, AlertTriangle, Lock } from 'lucide-react';
+import { Moon, Sun, Download, Upload, RefreshCw, Trash2, AlertTriangle, Lock, Share } from 'lucide-react';
 import { db } from '../db/db';
 import clsx from 'clsx';
 import CryptoJS from 'crypto-js';
 
 import { useRegisterSW } from 'virtual:pwa-register/react';
 
-const APP_VERSION = "1.0.0";
+const APP_VERSION = "1.0.1";
 
 export default function Settings() {
   const { t, i18n } = useTranslation();
   const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light');
+
+  // --- INSTALL PWA LOGIC ---
+  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+  const [isIOS, setIsIOS] = useState(false);
+  const [isStandalone, setIsStandalone] = useState(false);
+
+  useEffect(() => {
+    // Check if iOS
+    const isIosDevice = /iPad|iPhone|iPod/.test(navigator.userAgent) && !(window as any).MSStream;
+    setIsIOS(isIosDevice);
+
+    // Check if standalone
+    const isStandaloneMode = window.matchMedia('(display-mode: standalone)').matches || (navigator as any).standalone;
+    setIsStandalone(isStandaloneMode);
+
+    const handler = (e: any) => {
+      e.preventDefault();
+      setDeferredPrompt(e);
+    };
+    window.addEventListener('beforeinstallprompt', handler);
+    return () => window.removeEventListener('beforeinstallprompt', handler);
+  }, []);
+
+  const handleInstallClick = async () => {
+    if (!deferredPrompt) return;
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    if (outcome === 'accepted') {
+      setDeferredPrompt(null);
+    }
+  };
 
   // Update Logic using vite-plugin-pwa hook
   const {
@@ -211,6 +242,32 @@ export default function Settings() {
   return (
     <div className="max-w-4xl mx-auto space-y-8 pb-20">
       <h1 className="text-2xl font-bold">{t('settings')}</h1>
+
+      {/* Install App Section - Only show if installable */}
+      {(!isStandalone && (deferredPrompt || isIOS)) && (
+        <section className="glass-card p-6 rounded-2xl space-y-4 border-2 border-anydesk/20">
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 rounded-xl bg-anydesk/10 flex items-center justify-center text-anydesk">
+              <Download size={24} />
+            </div>
+            <div>
+              <h2 className="font-bold text-lg">{t('Install App')}</h2>
+              <p className="text-sm text-slate-500">{t('Install for the best experience')}</p>
+            </div>
+          </div>
+
+          {isIOS ? (
+            <div className="text-sm bg-slate-50 dark:bg-slate-900 p-4 rounded-xl space-y-2">
+              <p className="flex items-center gap-2 font-medium">1. {t('Tap the Share button')} <Share size={16} /></p>
+              <p className="flex items-center gap-2 font-medium">2. {t('Select "Add to Home Screen"')} <span className="text-xl leading-none">+</span></p>
+            </div>
+          ) : (
+            <button onClick={handleInstallClick} className="w-full bg-anydesk text-white py-3 rounded-xl font-bold shadow-lg shadow-anydesk/20 hover:bg-anydesk-dark transition-all">
+              {t('Install Now')}
+            </button>
+          )}
+        </section>
+      )}
 
       {/* Visual Settings */}
       <section className="glass-card p-6 rounded-2xl space-y-4">
