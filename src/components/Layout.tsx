@@ -1,5 +1,6 @@
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { NavLink, Outlet } from 'react-router-dom';
+import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { LayoutDashboard, Database, Settings } from 'lucide-react';
 import clsx from 'clsx';
 
@@ -11,6 +12,48 @@ export default function Layout() {
     { to: "/manager", icon: Database, label: t('Manager') },
     { to: "/settings", icon: Settings, label: t('settings') },
   ];
+
+  // Swipe Logic
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
+
+  // Minimum swipe distance (in px)
+  const minSwipeDistance = 50;
+
+  const onTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(null); // Reset
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const onTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > minSwipeDistance;
+    const isRightSwipe = distance < -minSwipeDistance;
+
+    // Determine current index
+    const currentIndex = navItems.findIndex(item => item.to === location.pathname);
+    if (currentIndex === -1) return;
+
+    if (isLeftSwipe) {
+      // Move Next (Forward)
+      if (currentIndex < navItems.length - 1) {
+        navigate(navItems[currentIndex + 1].to);
+      }
+    } else if (isRightSwipe) {
+      // Move Previous (Backward)
+      if (currentIndex > 0) {
+        navigate(navItems[currentIndex - 1].to);
+      }
+    }
+  };
 
   return (
     <div
@@ -46,7 +89,12 @@ export default function Layout() {
       </aside>
 
       {/* Mobile Header / Content */}
-      <main className="flex-1 flex flex-col min-w-0">
+      <main
+        className="flex-1 flex flex-col min-w-0"
+        onTouchStart={onTouchStart}
+        onTouchMove={onTouchMove}
+        onTouchEnd={onTouchEnd}
+      >
         <div className="md:hidden h-16 bg-anydesk text-white flex items-center px-4 sticky top-0 z-50 shadow-md">
           <Database size={24} className="mr-2" />
           <h1 className="font-bold text-lg">SvakiSto</h1>
