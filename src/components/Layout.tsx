@@ -8,7 +8,7 @@ export default function Layout() {
 
   const navItems = [
     { to: "/", icon: LayoutDashboard, label: t('dashboard') },
-    { to: "/clients", icon: Database, label: t('clients') },
+    { to: "/manager", icon: Database, label: t('Manager') },
     { to: "/settings", icon: Settings, label: t('settings') },
   ];
 

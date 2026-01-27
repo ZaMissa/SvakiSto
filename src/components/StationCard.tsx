@@ -43,7 +43,7 @@ export default function StationCard({ station }: StationCardProps) {
         <div>
           <h3 className="font-bold text-slate-800 dark:text-white truncate" title={station.name}>{station.name}</h3>
           <div className="flex items-center gap-1 text-xs text-slate-500 font-mono mt-1">
-            <span className="opacity-70">ID:</span>
+            <span className="opacity-70">{t('ID')}:</span>
             <span>{station.anydeskId}</span>
           </div>
         </div>
@@ -69,7 +69,7 @@ export default function StationCard({ station }: StationCardProps) {
             <Key size={16} />
             {showToast && (
               <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-slate-800 text-white text-[10px] py-1 px-2 rounded whitespace-nowrap">
-                Copied!
+                {t('Copied!')}
               </div>
             )}
           </button>

@@ -1,8 +1,9 @@
 import { useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
-import { Edit2, Trash2, Plus, MonitorPlay, Key } from 'lucide-react';
+import { Edit2, Trash2, Plus, MonitorPlay, Key, Move } from 'lucide-react';
 
-export type ContextMenuAction = 'add' | 'edit' | 'delete' | 'launch' | 'copyPassword';
+export type ContextMenuAction = 'add' | 'edit' | 'delete' | 'launch' | 'copyPassword' | 'move';
 
 interface ContextMenuProps {
   x: number;
@@ -35,25 +36,6 @@ export default function ContextMenu({ x, y, type, onAction, onClose, hasPassword
     };
   }, [onClose]);
 
-  const menuStyle: React.CSSProperties = {
-    position: 'fixed',
-    top: `${y}px`,
-    left: `${x}px`,
-  };
-
-  // Simple viewport adjustment logic
-  if (menuRef.current) {
-    const rect = menuRef.current.getBoundingClientRect();
-    const viewportWidth = window.innerWidth;
-    const viewportHeight = window.innerHeight;
-
-    if (x + rect.width > viewportWidth) {
-      menuStyle.left = `${x - rect.width}px`;
-    }
-    if (y + rect.height > viewportHeight) {
-      menuStyle.top = `${y - rect.height}px`;
-    }
-  }
 
   // Effect to re-measure after render (for accurate rect)
   useEffect(() => {
@@ -81,11 +63,11 @@ export default function ContextMenu({ x, y, type, onAction, onClose, hasPassword
     }
   }, [x, y]);
 
-  return (
+  return createPortal(
     <div
       ref={menuRef}
-      className="fixed z-[9999] bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl shadow-xl py-2 min-w-[160px] animate-in fade-in zoom-in-95 duration-100"
-      style={{ top: y, left: x, opacity: 0 }} // Start invisible, fade in via animation class but position via effect
+      className="fixed z-[9999] bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl shadow-xl py-2 min-w-[160px]"
+      style={{ top: y, left: x }}
       onClick={(e) => e.stopPropagation()}
     >
       {(type === 'root' || type === 'client' || type === 'object') && (
@@ -94,7 +76,7 @@ export default function ContextMenu({ x, y, type, onAction, onClose, hasPassword
           className="w-full px-4 py-2 text-left hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center gap-2 text-sm text-slate-700 dark:text-slate-200"
         >
           <Plus size={16} />
-          {t('add')}
+          {type === 'root' ? t('addClient') : type === 'client' ? t('addObject') : t('addStation')}
         </button>
       )}
 
@@ -118,6 +100,16 @@ export default function ContextMenu({ x, y, type, onAction, onClose, hasPassword
         </button>
       )}
 
+      {type !== 'root' && type !== 'client' && (
+        <button
+          onClick={() => onAction('move')}
+          className="w-full px-4 py-2 text-left hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center gap-2 text-sm text-slate-700 dark:text-slate-200"
+        >
+          <Move size={16} />
+          {t('Move')}
+        </button>
+      )}
+
       {type !== 'root' && (
         <>
           <div className="h-px bg-slate-100 dark:bg-slate-700 my-1 font-bold" />
@@ -137,6 +129,7 @@ export default function ContextMenu({ x, y, type, onAction, onClose, hasPassword
           </button>
         </>
       )}
-    </div>
+    </div>,
+    document.body
   );
 }
