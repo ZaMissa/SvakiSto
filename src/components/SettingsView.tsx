@@ -5,13 +5,44 @@ import { db } from '../db/db';
 import clsx from 'clsx';
 import CryptoJS from 'crypto-js';
 
+import { useRegisterSW } from 'virtual:pwa-register/react';
+
 const APP_VERSION = "1.0.0";
 
 export default function Settings() {
   const { t, i18n } = useTranslation();
   const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light');
-  const [updateAvailable, setUpdateAvailable] = useState(false);
-  const [remoteVersion, setRemoteVersion] = useState('');
+
+  // Update Logic using vite-plugin-pwa hook
+  const {
+    needRefresh: [needRefresh, setNeedRefresh],
+    updateServiceWorker,
+    update
+  } = useRegisterSW({
+    onRegistered(r) {
+      console.log('SW Registered:', r);
+    },
+    onRegisterError(error) {
+      console.log('SW registration error', error);
+    },
+  });
+
+  const [checking, setChecking] = useState(false);
+
+  // Manual Check
+  const handleCheckUpdate = async () => {
+    setChecking(true);
+    // Force update check
+    if ('serviceWorker' in navigator && navigator.serviceWorker.ready) {
+      const reg = await navigator.serviceWorker.ready;
+      await reg.update();
+    }
+    // "update()" from hook also triggers check? mostly registers. 
+    // reg.update() is the standard way to check for new SW on the server.
+
+    // Simulate check delay for UX
+    setTimeout(() => setChecking(false), 1000);
+  };
 
   // States
   const [password, setPassword] = useState(''); // For Export
@@ -25,20 +56,6 @@ export default function Settings() {
   const [showChangelogModal, setShowChangelogModal] = useState(false);
   const [previewData, setPreviewData] = useState<any>(null);
   const [changelog, setChangelog] = useState<string[]>([]);
-
-  useEffect(() => {
-    // Mock update check
-    fetch('./version.json').then(async res => {
-      if (res.ok) {
-        const remote = await res.json();
-        console.log("Remote version:", remote.version);
-        if (remote.version && remote.version !== APP_VERSION) {
-          setUpdateAvailable(true);
-          setRemoteVersion(remote.version);
-        }
-      }
-    }).catch(() => { });
-  }, []);
 
   useEffect(() => {
     // Theme application - direct DOM manipulation
@@ -115,12 +132,10 @@ export default function Settings() {
 
   // --- SAFE UPDATE ---
   const handleUpdateFlow = async () => {
-    if (confirm(t("updateBackupPrompt"))) {
+    if (confirm(t("updateBackupPrompt") || "Update available. Recommend backup first. Update now?")) {
       await handleExport();
-      // Wait for download to likely initiate
-      setTimeout(() => {
-        window.location.reload();
-      }, 1500);
+      // Proceed to update
+      updateServiceWorker(true);
     }
   };
 
@@ -313,19 +328,28 @@ export default function Settings() {
       {/* Updates */}
       <section className="glass-card p-6 rounded-2xl flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <div className={clsx("w-10 h-10 rounded-full flex items-center justify-center", updateAvailable ? "bg-amber-100 text-amber-500" : "bg-green-100 text-green-500")}>
-            <RefreshCw size={20} className={clsx(updateAvailable && "animate-spin")} />
+          <div className={clsx("w-10 h-10 rounded-full flex items-center justify-center", needRefresh ? "bg-amber-100 text-amber-500" : "bg-green-100 text-green-500")}>
+            <RefreshCw size={20} className={clsx((checking || needRefresh) && "animate-spin")} />
           </div>
           <div>
-            <h3 className="font-bold">{updateAvailable ? t('Update Available') : t('System Up to Date')}</h3>
+            <h3 className="font-bold">{needRefresh ? t('Update Available') : t('System Up to Date')}</h3>
             <p className="text-sm text-slate-500">
-              {updateAvailable ? `${t('New version found!')} (${remoteVersion})` : `${t('Running latest version')} (${APP_VERSION})`}
+              {needRefresh
+                ? t('New version ready to install')
+                : checking
+                  ? t('Checking for updates...')
+                  : `${t('Version')} ${APP_VERSION}`}
             </p>
           </div>
         </div>
-        {updateAvailable && (
+
+        {needRefresh ? (
           <button onClick={handleUpdateFlow} className="bg-amber-500 text-white px-4 py-2 rounded-lg font-medium shadow-lg shadow-amber-500/20 hover:bg-amber-600 transition-all">
             {t('Backup & Update')}
+          </button>
+        ) : (
+          <button onClick={handleCheckUpdate} disabled={checking} className="bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-4 py-2 rounded-lg font-medium hover:bg-slate-200 dark:hover:bg-slate-600 transition-all disabled:opacity-50">
+            {t('Check for Updates')}
           </button>
         )}
       </section>
