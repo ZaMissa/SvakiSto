@@ -205,12 +205,14 @@ export default function FileExplorer({
 
   const [inputValue, setInputValue] = useState('');
   const [secondInputValue, setSecondInputValue] = useState('');
+  const [passwordValue, setPasswordValue] = useState('');
 
   // Clean open handler
-  const openInputModal = (type: typeof inputModal.type, targetId?: number, initialValue = '', secondValue = '', itemType?: 'client' | 'object' | 'station') => {
+  const openInputModal = (type: typeof inputModal.type, targetId?: number, initialValue = '', secondValue = '', itemType?: 'client' | 'object' | 'station', initialPassword = '') => {
     setInputModal({ open: true, type, targetId, initialValue, secondValue, itemType });
     setInputValue(initialValue);
     setSecondInputValue(secondValue);
+    setPasswordValue(initialPassword);
   };
 
   // Action Handlers
@@ -229,12 +231,20 @@ export default function FileExplorer({
       case 'edit':
         if (!targetId || type === 'root') return;
         let currentName = '';
+        let currentSecond = '';
+        let currentPassword = '';
+
         if (type === 'client') currentName = (await db.clients.get(targetId))?.name || '';
         else if (type === 'object') currentName = (await db.objects.get(targetId))?.name || '';
-        else if (type === 'station') currentName = (await db.stations.get(targetId))?.name || '';
+        else if (type === 'station') {
+          const s = await db.stations.get(targetId);
+          currentName = s?.name || '';
+          currentSecond = s?.anydeskId || '';
+          currentPassword = s?.password || '';
+        }
 
         // Pass 'type' as itemType so we know what table to update
-        openInputModal('edit', targetId, currentName, '', type);
+        openInputModal('edit', targetId, currentName, currentSecond, type, currentPassword);
         break;
 
       case 'delete':
@@ -257,7 +267,7 @@ export default function FileExplorer({
           const station = await db.stations.get(targetId);
           if (station) {
             if (station.password) navigator.clipboard.writeText(station.password);
-            window.location.href = `anydesk:${station.anydeskId} `;
+            window.location.href = `anydesk:${station.anydeskId}`;
             await db.stations.update(targetId, { lastUsed: new Date(), usageCount: (station.usageCount || 0) + 1 });
           }
         }
@@ -294,6 +304,7 @@ export default function FileExplorer({
         objectId: targetId,
         name: inputValue,
         anydeskId: secondInputValue,
+        password: passwordValue,
         usageCount: 0,
         createdAt: new Date()
       });
@@ -302,7 +313,7 @@ export default function FileExplorer({
       // Precise update based on itemType
       if (itemType === 'client') await db.clients.update(targetId, { name: inputValue });
       else if (itemType === 'object') await db.objects.update(targetId, { name: inputValue });
-      else if (itemType === 'station') await db.stations.update(targetId, { name: inputValue });
+      else if (itemType === 'station') await db.stations.update(targetId, { name: inputValue, anydeskId: secondInputValue, password: passwordValue });
     }
 
     setInputModal({ ...inputModal, open: false });
@@ -359,45 +370,85 @@ export default function FileExplorer({
 
         {/* Tree Rendering */}
         <div className="space-y-1">
-          {clients?.map(client => (
-            <React.Fragment key={`c - ${client.id} `}>
-              <FileNode
-                item={client}
-                type="client"
-                level={0}
-                isExpanded={expandedClients.has(client.id)}
-                onToggle={() => toggleClient(client.id)}
-                onContextMenu={(e) => handleNodeContextMenu(e, 'client', client.id)}
-              />
+          {clients?.map(client => {
+            const clientObjects = objects?.filter(o => o.clientId === client.id) || [];
 
-              {/* Objects Level */}
-              {expandedClients.has(client.id) && objects?.filter(o => o.clientId === client.id).map(obj => (
-                <React.Fragment key={`o - ${obj.id} `}>
-                  <FileNode
-                    item={obj}
-                    type="object"
-                    level={1}
-                    isExpanded={expandedObjects.has(obj.id)}
-                    onToggle={() => toggleObject(obj.id)}
-                    onContextMenu={(e) => handleNodeContextMenu(e, 'object', obj.id)}
-                  />
+            return (
+              <React.Fragment key={`c - ${client.id} `}>
+                <FileNode
+                  item={client}
+                  type="client"
+                  level={0}
+                  isExpanded={expandedClients.has(client.id)}
+                  onToggle={() => toggleClient(client.id)}
+                  onContextMenu={(e) => handleNodeContextMenu(e, 'client', client.id)}
+                />
 
-                  {/* Stations Level */}
-                  {expandedObjects.has(obj.id) && stations?.filter(s => s.objectId === obj.id).map(station => (
-                    <FileNode
-                      key={`s - ${station.id} `}
-                      item={station}
-                      type="station"
-                      level={2}
-                      isSelected={selectedStationId === station.id}
-                      onSelect={() => onStationSelect(station)}
-                      onContextMenu={(e) => handleNodeContextMenu(e, 'station', station.id, !!station.password)}
-                    />
-                  ))}
-                </React.Fragment>
-              ))}
-            </React.Fragment>
-          ))}
+                {/* Objects Level */}
+                {expandedClients.has(client.id) && (
+                  <>
+                    {clientObjects.map(obj => {
+                      const objStations = stations?.filter(s => s.objectId === obj.id) || [];
+
+                      return (
+                        <React.Fragment key={`o - ${obj.id} `}>
+                          <FileNode
+                            item={obj}
+                            type="object"
+                            level={1}
+                            isExpanded={expandedObjects.has(obj.id)}
+                            onToggle={() => toggleObject(obj.id)}
+                            onContextMenu={(e) => handleNodeContextMenu(e, 'object', obj.id)}
+                          />
+
+                          {/* Stations Level */}
+                          {expandedObjects.has(obj.id) && (
+                            <>
+                              {objStations.map(station => (
+                                <FileNode
+                                  key={`s - ${station.id} `}
+                                  item={station}
+                                  type="station"
+                                  level={2}
+                                  isSelected={selectedStationId === station.id}
+                                  onSelect={() => onStationSelect(station)}
+                                  onContextMenu={(e) => handleNodeContextMenu(e, 'station', station.id, !!station.password)}
+                                />
+                              ))}
+
+                              {objStations.length === 0 && (
+                                <div className="pl-12 py-1">
+                                  <button
+                                    onClick={() => openInputModal('addStation', obj.id)}
+                                    className="text-xs flex items-center gap-1 text-slate-400 hover:text-anydesk transition-colors px-2 py-1 rounded-lg hover:bg-anydesk/5 border border-dashed border-slate-300 dark:border-slate-700 w-full"
+                                  >
+                                    <Plus size={12} />
+                                    {t('addStation')}
+                                  </button>
+                                </div>
+                              )}
+                            </>
+                          )}
+                        </React.Fragment>
+                      );
+                    })}
+
+                    {clientObjects.length === 0 && (
+                      <div className="pl-8 py-1">
+                        <button
+                          onClick={() => openInputModal('addObject', client.id)}
+                          className="text-xs flex items-center gap-1 text-slate-400 hover:text-anydesk transition-colors px-2 py-1 rounded-lg hover:bg-anydesk/5 border border-dashed border-slate-300 dark:border-slate-700 w-full"
+                        >
+                          <Plus size={12} />
+                          {t('addObject')}
+                        </button>
+                      </div>
+                    )}
+                  </>
+                )}
+              </React.Fragment>
+            );
+          })}
         </div>
 
         {contextMenu && (
@@ -465,15 +516,28 @@ export default function FileExplorer({
                 </div>
 
                 {/* Extra fields for Station */}
-                {inputModal.type === 'addStation' && (
-                  <div>
-                    <label className="block text-sm text-slate-500 mb-1">{t('anydeskId')}</label>
-                    <input
-                      className="w-full px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 dark:bg-slate-900 outline-none"
-                      value={secondInputValue}
-                      onChange={e => setSecondInputValue(e.target.value)}
-                    />
-                  </div>
+                {(inputModal.type === 'addStation' || (inputModal.type === 'edit' && inputModal.itemType === 'station')) && (
+                  <>
+                    <div>
+                      <label className="block text-sm text-slate-500 mb-1">{t('anydeskId')}</label>
+                      <input
+                        className="w-full px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 dark:bg-slate-900 outline-none font-mono"
+                        value={secondInputValue}
+                        onChange={e => setSecondInputValue(e.target.value)}
+                        placeholder="123 456 789"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm text-slate-500 mb-1">{t('password')} ({t('optional')})</label>
+                      <input
+                        type="text"
+                        className="w-full px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 dark:bg-slate-900 outline-none font-mono"
+                        value={passwordValue}
+                        onChange={e => setPasswordValue(e.target.value)}
+                        placeholder="Secret123"
+                      />
+                    </div>
+                  </>
                 )}
               </div>
 
