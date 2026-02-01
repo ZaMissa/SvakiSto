@@ -1,13 +1,13 @@
 {
-  "version": "1.3.7",
+  "version": "1.3.8",
   "notes": {
     "en": [
-      "Enhanced 'Move' feature with Search and Destination Context.",
-      "Fixed theme initialization bug."
+      "Group names now scroll horizontally with mouse wheel.",
+      "Most frequently used groups are now shown first."
     ],
     "sr": [
-      "Poboljšana 'Premesti' funkcija sa pretragom i kontekstom destinacije.",
-      "Popravljen problem sa učitavanjem teme."
+      "Grupe se sada skroluju horizontalno pomoću točkića miša.",
+      "Najčešće korišćene grupe su sada prikazane prve."
     ]
   }
 }

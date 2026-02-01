@@ -4,6 +4,7 @@ export interface Group {
   id: number;
   name: string;
   color: string;
+  usageCount?: number;
 }
 
 export interface Client {
@@ -61,6 +62,10 @@ db.version(2).stores({
 
 db.version(3).stores({
   backups: '++id, createdAt'
+});
+
+db.version(4).stores({
+  groups: '++id, name, usageCount' // Added usageCount
 });
 
 export { db };

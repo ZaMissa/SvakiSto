@@ -15,7 +15,16 @@ export default function HierarchyManager() {
   const [sortBy, setSortBy] = useState<'name' | 'date'>('name');
   const [selectedGroupId, setSelectedGroupId] = useState<number | null>(null);
 
-  const groups = useLiveQuery(() => db.groups.toArray());
+  const groups = useLiveQuery(async () => {
+    const all = await db.groups.toArray();
+    // Sort by usageCount (desc) then name (asc)
+    return all.sort((a, b) => {
+      const usageA = a.usageCount || 0;
+      const usageB = b.usageCount || 0;
+      if (usageA !== usageB) return usageB - usageA;
+      return a.name.localeCompare(b.name);
+    });
+  });
 
   // Mobile Modal logic
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
@@ -114,6 +123,11 @@ export default function HierarchyManager() {
           {/* Horizontal Group Filter */}
           <div
             className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-hide -mx-4 px-4"
+            onWheel={(e) => {
+              if (e.deltaY !== 0) {
+                e.currentTarget.scrollLeft += e.deltaY;
+              }
+            }}
             onTouchStart={(e) => e.stopPropagation()}
             onTouchMove={(e) => e.stopPropagation()}
             onTouchEnd={(e) => e.stopPropagation()}
@@ -143,7 +157,11 @@ export default function HierarchyManager() {
             {groups?.map(g => (
               <button
                 key={g.id}
-                onClick={() => setSelectedGroupId(g.id)}
+                onClick={async () => {
+                  setSelectedGroupId(g.id);
+                  // Increment usage count
+                  await db.groups.update(g.id, { usageCount: (g.usageCount || 0) + 1 });
+                }}
                 onContextMenu={(e) => handleGroupContextMenu(e, g.id)}
                 className={clsx(
                   "flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-colors border group relative",
