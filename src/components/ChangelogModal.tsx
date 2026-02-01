@@ -42,7 +42,10 @@ export default function ChangelogModal({ isOpen, onClose, title }: ChangelogModa
     if (isOpen) {
       setLoading(true);
       // Add timestamp to bust cache
-      fetch(`/version.json?t=${Date.now()}`)
+      // Use BASE_URL for correct path in subfolder deployments (e.g. GitHub Pages)
+      const baseUrl = import.meta.env.BASE_URL;
+      const jsonPath = `${baseUrl}version.json`.replace('//', '/'); // Avoid double slashes if base ends with /
+      fetch(`${jsonPath}?t=${Date.now()}`)
         .then(res => res.json())
         .then((json: VersionData) => {
           setData(json);
