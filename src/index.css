@@ -1,0 +1,16 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+
+  html,
+  body {
+    @apply bg-slate-50 text-slate-900 dark:bg-slate-900 dark:text-slate-50 transition-colors duration-200;
+    overscroll-behavior-y: none;
+  }
+}
+
+.glass-card {
+  @apply bg-white/90 dark:bg-slate-800/90 backdrop-blur-md border border-white/20 dark:border-slate-700 shadow-xl;
+}
