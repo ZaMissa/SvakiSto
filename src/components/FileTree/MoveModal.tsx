@@ -1,7 +1,7 @@
-import React, { useState, useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Search, X } from 'lucide-react';
-import { Client, ClientObject } from '../../db/db';
+import type { Client, ClientObject } from '../../db/db';
 
 interface MoveModalProps {
   isOpen: boolean;
