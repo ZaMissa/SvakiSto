@@ -5,6 +5,7 @@ import { Plus, ChevronsDownUp } from 'lucide-react';
 import { db, type Station } from '../../db/db';
 import ContextMenu, { type ContextMenuAction } from './ContextMenu';
 import FileNode from './FileNode';
+import MoveModal from './MoveModal';
 
 interface FileExplorerProps {
   onStationSelect: (station: Station) => void;
@@ -496,34 +497,14 @@ export default function FileExplorer({
           />
         )}
 
-        {moveModalOpen && moveTarget && (
-          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-            <div className="bg-white dark:bg-slate-800 w-full max-w-sm rounded-2xl p-6 shadow-2xl">
-              <h3 className="text-lg font-bold mb-4">{t('Select Destination')}</h3>
-              <div className="max-h-60 overflow-y-auto space-y-1 bg-slate-50 dark:bg-slate-900 p-2 rounded-xl mb-4">
-                {moveTarget.type === 'object' && clients?.map(c => (
-                  <button
-                    key={c.id}
-                    onClick={() => executeMove(c.id)}
-                    className="w-full text-left px-3 py-2 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700 text-sm truncate"
-                  >
-                    {c.name}
-                  </button>
-                ))}
-                {moveTarget.type === 'station' && objects?.map(o => (
-                  <button
-                    key={o.id}
-                    onClick={() => executeMove(o.id)}
-                    className="w-full text-left px-3 py-2 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700 text-sm truncate"
-                  >
-                    {o.name}
-                  </button>
-                ))}
-              </div>
-              <button onClick={() => setMoveModalOpen(false)} className="w-full py-2 rounded-xl border border-slate-200 hover:bg-slate-50">{t('cancel')}</button>
-            </div>
-          </div>
-        )}
+        <MoveModal
+          isOpen={moveModalOpen}
+          onClose={() => setMoveModalOpen(false)}
+          moveTarget={moveTarget}
+          clients={rawClients}
+          objects={rawObjects}
+          onExecuteMove={executeMove}
+        />
 
         {inputModal.open && (
           <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
