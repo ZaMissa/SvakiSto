@@ -125,7 +125,9 @@ i18n
           "Restarting App...": "Restarting App...",
           "Download Backup": "Download Backup",
           "Checking...": "Checking...",
-          "Check for Update": "Check for Update"
+          "Check for Update": "Check for Update",
+          "Open AnyDesk": "Open AnyDesk Application",
+          "Copy": "Copy"
         }
       },
       sr: {
@@ -241,7 +243,9 @@ i18n
           "Restarting App...": "Restartovanje Aplikacije...",
           "Download Backup": "Preuzmi Backup",
           "Checking...": "Provera...",
-          "Check for Update": "Proveri Ažuriranja"
+          "Check for Update": "Proveri Ažuriranja",
+          "Open AnyDesk": "Otvori AnyDesk Aplikaciju",
+          "Copy": "Kopiraj"
         }
       }
     }
