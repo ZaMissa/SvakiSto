@@ -127,7 +127,10 @@ i18n
           "Checking...": "Checking...",
           "Check for Update": "Check for Update",
           "Open AnyDesk": "Open AnyDesk Application",
-          "Copy": "Copy"
+          "Copy": "Copy",
+          "What's New": "What's New",
+          "Awesome!": "Awesome!",
+          "No release notes available.": "No release notes available."
         }
       },
       sr: {
@@ -245,7 +248,10 @@ i18n
           "Checking...": "Provera...",
           "Check for Update": "Proveri Ažuriranja",
           "Open AnyDesk": "Otvori AnyDesk Aplikaciju",
-          "Copy": "Kopiraj"
+          "Copy": "Kopiraj",
+          "What's New": "Šta je novo",
+          "Awesome!": "Sjajno!",
+          "No release notes available.": "Nema dostupnih beleški o izdanju."
         }
       }
     }

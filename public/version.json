@@ -1,13 +1,13 @@
 {
-  "version": "1.3.11",
+  "version": "1.3.12",
   "notes": {
     "en": [
-      "Added Launch Modal with Password visibility.",
-      "See the password clearly before opening AnyDesk."
+      "Added In-App Changelog.",
+      "See what's new directly in the app after an update."
     ],
     "sr": [
-      "Dodat prozor za pokretanje sa prikazom lozinke.",
-      "Jasno vidite lozinku pre otvaranja AnyDesk-a."
+      "Dodat prikaz istorije promena u aplikaciji.",
+      "Vidite šta je novo direktno u aplikaciji nakon ažuriranja."
     ]
   }
 }

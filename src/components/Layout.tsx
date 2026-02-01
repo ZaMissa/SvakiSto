@@ -1,5 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { APP_VERSION } from '../version';
+import ChangelogModal from './ChangelogModal';
 import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { LayoutDashboard, Database, Settings, CircleHelp } from 'lucide-react';
 import clsx from 'clsx';
@@ -57,6 +59,26 @@ export default function Layout() {
     }
   };
 
+  // Changelog Logic
+  const [showChangelog, setShowChangelog] = useState(false);
+  useEffect(() => {
+    // Check if we have seen this version's changelog
+    const lastVersion = localStorage.getItem('last_seen_version');
+
+    // If no last version (first run) or different version, show changelog
+    // Option: Don't show on very first install? Usually 'last_seen_version' is null.
+    // Let's show it so they see "What's New" or welcome features.
+    // Or better: If null, maybe just set it to current?
+    // User requested: "show changelog on update".
+    // If I just installed 1.3.11, I want to see features.
+
+    if (lastVersion !== APP_VERSION) {
+      // Small delay to ensure app is ready/Animation smooth
+      setTimeout(() => setShowChangelog(true), 1000);
+      localStorage.setItem('last_seen_version', APP_VERSION);
+    }
+  }, []);
+
   return (
     <div
       className="min-h-screen flex flex-col md:flex-row"
@@ -65,6 +87,7 @@ export default function Layout() {
         e.preventDefault();
       }}
     >
+      <ChangelogModal isOpen={showChangelog} onClose={() => setShowChangelog(false)} />
       {/* Desktop Sidebar */}
       <aside className="hidden md:flex flex-col w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-700 p-4">
         <div className="mb-8 flex items-center gap-2 text-anydesk font-bold text-xl">

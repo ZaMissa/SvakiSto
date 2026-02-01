@@ -4,6 +4,7 @@ import { usePWA } from '../../hooks/usePWA';
 import { useTranslation } from 'react-i18next';
 import { generateBackupData, downloadBackup, createInternalBackup } from '../../utils/exportUtils';
 import { UpdateModal } from '../UpdateModal';
+import ChangelogModal from '../ChangelogModal';
 
 // ... (keep APP_VERSION prop interface if needed, or remove if unused in this file scope)
 interface UpdateManagerProps {
@@ -14,6 +15,7 @@ export const UpdateManager: React.FC<UpdateManagerProps> = ({ appVersion }) => {
   const { needRefresh, updateServiceWorker, checking, handleCheckUpdate } = usePWA(appVersion);
   const { t } = useTranslation();
   const [showModal, setShowModal] = useState(false);
+  const [showChangelog, setShowChangelog] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
 
   // Auto-Backup as soon as update is detected
@@ -85,7 +87,17 @@ export const UpdateManager: React.FC<UpdateManagerProps> = ({ appVersion }) => {
             <RefreshCw size={16} className={checking ? "animate-spin" : ""} />
             {checking ? t('Checking...') : t('Check for Update')}
           </button>
+
         )}
+      </div>
+
+      <div className="mt-4 flex justify-end">
+        <button
+          onClick={() => setShowChangelog(true)}
+          className="text-xs text-slate-400 hover:text-anydesk underline"
+        >
+          {t('What\'s New')}
+        </button>
       </div>
 
       <UpdateModal
@@ -93,6 +105,12 @@ export const UpdateManager: React.FC<UpdateManagerProps> = ({ appVersion }) => {
         onClose={() => setShowModal(false)}
         onConfirmBackup={handleConfirmBackup}
         onSkipBackup={performUpdate}
+      />
+
+      <ChangelogModal
+        isOpen={showChangelog}
+        onClose={() => setShowChangelog(false)}
+        title={t('What\'s New')}
       />
     </section >
   );
