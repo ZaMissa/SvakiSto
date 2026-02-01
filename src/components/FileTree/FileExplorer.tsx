@@ -355,11 +355,79 @@ export default function FileExplorer({
     setInputModal({ ...inputModal, open: false });
   };
 
+  // Bulk Selection State
+  const [isSelectionMode, setIsSelectionMode] = useState(false);
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+
+  // Toggle Selection
+  const toggleSelection = (type: 'client' | 'object' | 'station', id: number) => {
+    const key = `${type}-${id}`;
+    const newSet = new Set(selectedIds);
+    if (newSet.has(key)) newSet.delete(key);
+    else newSet.add(key);
+    setSelectedIds(newSet);
+  };
+
+  const handleBulkDelete = async () => {
+    if (!confirm(t('Are you sure you want to delete selected items?'))) return;
+
+    // Process deletions
+    const toDelete = Array.from(selectedIds).map(str => {
+      const [type, idStr] = str.split('-');
+      return { type: type as 'client' | 'object' | 'station', id: parseInt(idStr) };
+    });
+
+    // Delete stations first, then objects, then clients to prevent orphans (or just handle standard deletion)
+    // Actually, simple sequential delete works if we handle dependencies.
+
+    for (const item of toDelete) {
+      if (item.type === 'station') await db.stations.delete(item.id);
+      if (item.type === 'object') {
+        await db.stations.where('objectId').equals(item.id).delete();
+        await db.objects.delete(item.id);
+      }
+      if (item.type === 'client') {
+        const objs = await db.objects.where('clientId').equals(item.id).toArray();
+        for (const o of objs) await db.stations.where('objectId').equals(o.id).delete();
+        await db.objects.where('clientId').equals(item.id).delete();
+        await db.clients.delete(item.id);
+      }
+    }
+
+    setSelectedIds(new Set());
+    setIsSelectionMode(false);
+  };
+
+  const [bulkMoveModalOpen, setBulkMoveModalOpen] = useState(false);
+
+  // Re-use single move logic for bulk?
+  // We need a bulk move executor.
+  const executeBulkMove = async (newParentId: number) => {
+    const toMove = Array.from(selectedIds).map(str => {
+      const [type, idStr] = str.split('-');
+      return { type: type as 'client' | 'object' | 'station', id: parseInt(idStr) };
+    });
+
+    for (const item of toMove) {
+      if (item.type === 'object') await db.objects.update(item.id, { clientId: newParentId });
+      if (item.type === 'station') await db.stations.update(item.id, { objectId: newParentId });
+    }
+
+    setBulkMoveModalOpen(false);
+    setSelectedIds(new Set());
+    setIsSelectionMode(false);
+  };
+
   // Move Logic
   const [moveModalOpen, setMoveModalOpen] = useState(false);
   const [moveTarget, setMoveTarget] = useState<{ type: 'object' | 'station', id: number } | null>(null);
 
   const executeMove = async (newParentId: number) => {
+    if (bulkMoveModalOpen) {
+      await executeBulkMove(newParentId);
+      return;
+    }
+
     if (!moveTarget) return;
 
     if (moveTarget.type === 'object') {
@@ -377,24 +445,103 @@ export default function FileExplorer({
       onContextMenu={handleBackgroundContextMenu}
     >
       {/* Sticky New Client Button */}
+      {/* Sticky Toolbar */}
       <div className="p-4 bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm sticky top-0 z-10 border-b border-slate-200 dark:border-slate-700 flex gap-2">
-        <button
-          onClick={() => openInputModal('addClient', undefined, '', '', undefined, '', filterGroupId || undefined)}
-          className="flex-1 flex items-center justify-center gap-2 bg-anydesk text-white px-4 py-2 rounded-xl hover:bg-anydesk-dark transition-colors shadow-lg shadow-anydesk/20 font-medium text-sm"
-        >
-          <Plus size={16} />
-          {t('addClient')}
-        </button>
-        <button
-          onClick={collapseAll}
-          className="px-3 py-2 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded-xl hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
-          title={t('Collapse All')}
-        >
-          <ChevronsDownUp size={18} />
-        </button>
+        {isSelectionMode ? (
+          <div className="flex-1 flex gap-2 animate-in fade-in slide-in-from-top-2">
+            <button
+              onClick={() => {
+                setIsSelectionMode(false);
+                setSelectedIds(new Set());
+              }}
+              className="px-4 py-2 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 rounded-xl font-medium text-sm"
+            >
+              {t('cancel')}
+            </button>
+            <div className="flex-1 text-center flex items-center justify-center text-sm font-bold text-slate-700 dark:text-slate-200">
+              {selectedIds.size} {t('Selected')}
+            </div>
+            {selectedIds.size > 0 && (
+              <>
+                <button
+                  onClick={() => {
+                    // Determine if we can move (must be objects or stations)
+                    // Mixed types are tricky. Let's say we only support moving Objects OR Stations, not clients.
+                    // Or handle mix. MoveModal expects clients or objects as destination.
+                    // For simplicity, let's open MoveModal and let it handle?
+                    // But MoveModal currently takes raw Clients/Objects as targets. 
+                    // We need to know what we are moving to filter destinations.
+
+                    // Heuristic: If we are moving Stations, we show Objects as targets.
+                    // If moving Objects, we show Clients.
+                    // If mixed... we probably disable move or show Clients (and re-parent objects) but stations?
+
+                    const types = Array.from(selectedIds).map(s => s.split('-')[0]);
+                    if (types.includes('client')) {
+                      alert(t("Cannot move Clients"));
+                      return;
+                    }
+
+                    // If we have stations, we can move to Object.
+                    // If we have Objects, we move to Client.
+                    // If mixed... it's messy.
+                    // Lets assume user selects same type or we warn.
+
+                    const hasStations = types.includes('station');
+                    const hasObjects = types.includes('object');
+
+                    if (hasStations && hasObjects) {
+                      alert(t("Please select only Objects OR Stations to move"));
+                      return;
+                    }
+
+                    // Hack: Set a dummy 'moveTarget' to trigger the right list in MoveModal
+                    if (hasStations) setMoveTarget({ type: 'station', id: -1 });
+                    else setMoveTarget({ type: 'object', id: -1 });
+
+                    setBulkMoveModalOpen(true);
+                    setMoveModalOpen(true);
+                  }}
+                  className="px-3 py-2 bg-blue-100 text-blue-700 rounded-xl font-medium text-sm"
+                >
+                  {t('Move')}
+                </button>
+                <button
+                  onClick={handleBulkDelete}
+                  className="px-3 py-2 bg-red-100 text-red-700 rounded-xl font-medium text-sm"
+                >
+                  {t('Delete')}
+                </button>
+              </>
+            )}
+          </div>
+        ) : (
+          <>
+            <button
+              onClick={() => openInputModal('addClient', undefined, '', '', undefined, '', filterGroupId || undefined)}
+              className="flex-1 flex items-center justify-center gap-2 bg-anydesk text-white px-4 py-2 rounded-xl hover:bg-anydesk-dark transition-colors shadow-lg shadow-anydesk/20 font-medium text-sm"
+            >
+              <Plus size={16} />
+              {t('addClient')}
+            </button>
+            <button
+              onClick={() => setIsSelectionMode(true)}
+              className="px-3 py-2 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded-xl hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors font-medium text-sm"
+            >
+              {t('Select')}
+            </button>
+            <button
+              onClick={collapseAll}
+              className="px-3 py-2 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded-xl hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
+              title={t('Collapse All')}
+            >
+              <ChevronsDownUp size={18} />
+            </button>
+          </>
+        )}
       </div>
 
-      <div className="flex-1 overflow-y-auto p-4 select-none">
+      <div className="flex-1 overflow-y-auto p-4 select-none pb-20"> {/* Extra padding for footer/mobile */}
         {clients?.length === 0 && (
           <div className="text-center text-slate-400 mt-10 p-4">
             <div className="w-12 h-12 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-3">
@@ -422,6 +569,9 @@ export default function FileExplorer({
                   isExpanded={expandedClients.has(client.id)}
                   onToggle={() => toggleClient(client.id)}
                   onContextMenu={(e) => handleNodeContextMenu(e, 'client', client.id)}
+                  isSelectionMode={isSelectionMode}
+                  isChecked={selectedIds.has(`client-${client.id}`)}
+                  onCheck={() => toggleSelection('client', client.id)}
                 />
 
                 {expandedClients.has(client.id) && (
@@ -437,6 +587,9 @@ export default function FileExplorer({
                             isExpanded={expandedObjects.has(obj.id)}
                             onToggle={() => toggleObject(obj.id)}
                             onContextMenu={(e) => handleNodeContextMenu(e, 'object', obj.id)}
+                            isSelectionMode={isSelectionMode}
+                            isChecked={selectedIds.has(`object-${obj.id}`)}
+                            onCheck={() => toggleSelection('object', obj.id)}
                           />
 
                           {expandedObjects.has(obj.id) && (
@@ -450,9 +603,12 @@ export default function FileExplorer({
                                   isSelected={selectedStationId === station.id}
                                   onSelect={() => onStationSelect(station)}
                                   onContextMenu={(e) => handleNodeContextMenu(e, 'station', station.id, !!station.password)}
+                                  isSelectionMode={isSelectionMode}
+                                  isChecked={selectedIds.has(`station-${station.id}`)}
+                                  onCheck={() => toggleSelection('station', station.id)}
                                 />
                               ))}
-                              {objStations.length === 0 && (
+                              {!isSelectionMode && objStations.length === 0 && (
                                 <div className="pl-12 py-1">
                                   <button
                                     onClick={() => openInputModal('addStation', obj.id)}
@@ -468,7 +624,7 @@ export default function FileExplorer({
                         </React.Fragment>
                       );
                     })}
-                    {clientObjects.length === 0 && (
+                    {!isSelectionMode && clientObjects.length === 0 && (
                       <div className="pl-8 py-1">
                         <button
                           onClick={() => openInputModal('addObject', client.id)}
@@ -499,8 +655,11 @@ export default function FileExplorer({
 
         <MoveModal
           isOpen={moveModalOpen}
-          onClose={() => setMoveModalOpen(false)}
-          moveTarget={moveTarget}
+          onClose={() => {
+            setMoveModalOpen(false);
+            if (bulkMoveModalOpen) setBulkMoveModalOpen(false);
+          }}
+          moveTarget={bulkMoveModalOpen && moveTarget ? moveTarget : moveTarget}
           clients={rawClients}
           objects={rawObjects}
           onExecuteMove={executeMove}

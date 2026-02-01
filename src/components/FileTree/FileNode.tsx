@@ -12,6 +12,10 @@ interface FileNodeProps {
   onToggle?: () => void;
   onSelect?: () => void;
   onContextMenu: (e: React.MouseEvent) => void;
+  // Selection Props
+  isSelectionMode?: boolean;
+  isChecked?: boolean;
+  onCheck?: () => void;
 }
 
 export default function FileNode({
@@ -22,7 +26,10 @@ export default function FileNode({
   level,
   onToggle,
   onSelect,
-  onContextMenu
+  onContextMenu,
+  isSelectionMode,
+  isChecked,
+  onCheck
 }: FileNodeProps) {
 
   const elementRef = React.useRef<HTMLDivElement>(null);
@@ -45,14 +52,19 @@ export default function FileNode({
       ref={elementRef}
       className={clsx(
         "flex items-center gap-2 py-2 px-2 cursor-pointer select-none transition-colors border-b last:border-0 border-slate-100 dark:border-slate-800", // Basic layout + borders
-        isSelected && "bg-anydesk/10 dark:bg-anydesk/20 text-anydesk", // Selected state
-        !isSelected && type === 'client' && "bg-white dark:bg-slate-900 font-semibold text-slate-800 dark:text-slate-100", // Client row
-        !isSelected && type === 'object' && "bg-slate-50 dark:bg-slate-900/50 text-slate-700 dark:text-slate-300", // Object row
-        !isSelected && type === 'station' && "hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400" // Station row
+        isSelected && !isSelectionMode && "bg-anydesk/10 dark:bg-anydesk/20 text-anydesk", // Selected state (only if not in selection mode, or keep highlight?)
+        isChecked && "bg-blue-50 dark:bg-blue-900/20", // Checked state background
+        !isSelected && !isChecked && type === 'client' && "bg-white dark:bg-slate-900 font-semibold text-slate-800 dark:text-slate-100", // Client row
+        !isSelected && !isChecked && type === 'object' && "bg-slate-50 dark:bg-slate-900/50 text-slate-700 dark:text-slate-300", // Object row
+        !isSelected && !isChecked && type === 'station' && "hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400" // Station row
       )}
       style={{ paddingLeft: `${level * 12 + 8}px` }}
       onClick={(e) => {
         e.stopPropagation();
+        if (isSelectionMode && onCheck) {
+          onCheck();
+          return;
+        }
         if (!isLeaf && onToggle) onToggle();
         if (onSelect) onSelect();
       }}
@@ -62,9 +74,33 @@ export default function FileNode({
         onContextMenu(e);
       }}
     >
+      {/* Checkbox for Selection Mode */}
+      {isSelectionMode && (
+        <div className="pr-2 flex items-center justify-center" onClick={(e) => {
+          e.stopPropagation();
+          if (onCheck) onCheck();
+        }}>
+          <div className={clsx(
+            "w-4 h-4 rounded border flex items-center justify-center transition-colors",
+            isChecked ? "bg-anydesk border-anydesk text-white" : "border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800"
+          )}>
+            {isChecked && <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>}
+          </div>
+        </div>
+      )}
+
       {/* Expander Icon */}
       {!isLeaf && (
-        <span className={clsx("text-slate-400 transition-transform", isExpanded && "rotate-90")}>
+        <span
+          className={clsx("text-slate-400 transition-transform p-1 hover:text-slate-600", isExpanded && "rotate-90")}
+          onClick={(e) => {
+            // Allow expanding even in selection mode if clicking chevron directly
+            if (isSelectionMode) {
+              e.stopPropagation();
+              if (onToggle) onToggle();
+            }
+          }}
+        >
           <ChevronRight size={16} />
         </span>
       )}
@@ -90,16 +126,18 @@ export default function FileNode({
 
       <span className="truncate flex-1 text-sm">{item.name}</span>
 
-      {/* Mobile/Touch Context Trigger */}
-      <button
-        className="md:hidden p-2 text-slate-400 active:text-slate-600"
-        onClick={(e) => {
-          e.stopPropagation();
-          onContextMenu(e);
-        }}
-      >
-        <MoreVertical size={16} />
-      </button>
+      {/* Mobile/Touch Context Trigger - Hide in selection mode? */}
+      {!isSelectionMode && (
+        <button
+          className="md:hidden p-2 text-slate-400 active:text-slate-600"
+          onClick={(e) => {
+            e.stopPropagation();
+            onContextMenu(e);
+          }}
+        >
+          <MoreVertical size={16} />
+        </button>
+      )}
 
     </div>
   );

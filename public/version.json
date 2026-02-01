@@ -1,13 +1,13 @@
 {
-  "version": "1.3.9",
+  "version": "1.3.10",
   "notes": {
     "en": [
-      "Fixed Footer overlaying content in Manager View.",
-      "Improved layout stability."
+      "Added Bulk Actions (Multi-select, Delete, Move).",
+      "Click 'Select' to manage multiple items at once."
     ],
     "sr": [
-      "Popravljen problem gde je podnožje prekrivalo sadržaj u Menadžeru.",
-      "Poboljšana stabilnost izgleda."
+      "Dodate masovne akcije (Višestruki izbor, Brisanje, Premeštanje).",
+      "Kliknite 'Izaberi' za upravljanje više stavki odjednom."
     ]
   }
 }
