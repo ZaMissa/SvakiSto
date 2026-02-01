@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { MonitorPlay, Key, Copy, Check, ExternalLink } from 'lucide-react';
+import { MonitorPlay, Copy, Check, ExternalLink, Eye, EyeOff } from 'lucide-react';
 import { db, type Station } from '../db/db';
 
 interface StationActionPanelProps {
@@ -79,14 +79,16 @@ export default function StationActionPanel({ station, onClose }: StationActionPa
                 className="w-full text-center font-mono text-lg bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl py-3 px-10 focus:ring-2 focus:ring-anydesk/50 outline-none transition-all"
               />
               <button
+                type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-1"
+                className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-2 z-10 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                title={showPassword ? t('hide') : t('show')}
               >
-                <Key size={18} />
+                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
               </button>
               <button
                 onClick={handleCopyPassword}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-anydesk p-1"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-anydesk p-2 z-10 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
                 title={t('copyPassword')}
               >
                 {copied ? <Check size={18} className="text-green-500" /> : <Copy size={18} />}
