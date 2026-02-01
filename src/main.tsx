@@ -5,11 +5,14 @@ import './i18n'
 import App from './App.tsx'
 
 import { GlobalErrorBoundary } from './components/GlobalErrorBoundary'
+import { ThemeProvider } from './context/ThemeContext'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <GlobalErrorBoundary>
-      <App />
+      <ThemeProvider>
+        <App />
+      </ThemeProvider>
     </GlobalErrorBoundary>
   </StrictMode>,
 )
