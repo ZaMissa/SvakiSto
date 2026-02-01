@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
 import { X, Sparkles } from 'lucide-react';
 import { APP_VERSION } from '../version';
@@ -44,8 +45,8 @@ export default function ChangelogModal({ isOpen, onClose, title }: ChangelogModa
   const notes = data?.notes[currentLang] || data?.notes['en'] || [];
   const displayVersion = data?.version || APP_VERSION;
 
-  return (
-    <div className="fixed inset-0 z-[300] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in">
+  return createPortal(
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in">
       <div className="bg-white dark:bg-slate-900 w-full max-w-md rounded-2xl p-6 shadow-2xl relative border border-white/10 flex flex-col max-h-[80vh]">
         <button
           onClick={onClose}
@@ -93,6 +94,7 @@ export default function ChangelogModal({ isOpen, onClose, title }: ChangelogModa
           {t('Awesome!')}
         </button>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }

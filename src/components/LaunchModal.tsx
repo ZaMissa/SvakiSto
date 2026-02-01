@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
 import { MonitorPlay, Key, Eye, EyeOff, Copy, X } from 'lucide-react';
 import { type Station } from '../db/db';
@@ -25,8 +26,8 @@ export default function LaunchModal({ isOpen, onClose, station, onLaunch }: Laun
     }
   };
 
-  return (
-    <div className="fixed inset-0 z-[300] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in">
+  return createPortal(
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in">
       <div className="bg-white dark:bg-slate-900 w-full max-w-sm rounded-2xl p-6 shadow-2xl relative border border-white/10">
         <button
           onClick={onClose}
@@ -83,6 +84,7 @@ export default function LaunchModal({ isOpen, onClose, station, onLaunch }: Laun
           {t('Open AnyDesk')}
         </button>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }

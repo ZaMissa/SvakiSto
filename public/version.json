@@ -1,13 +1,13 @@
 {
-  "version": "1.3.12",
+  "version": "1.3.13",
   "notes": {
     "en": [
-      "Added In-App Changelog.",
-      "See what's new directly in the app after an update."
+      "Fixed Z-Index issue with Launch Modal.",
+      "Modals now correctly appear on top of everything."
     ],
     "sr": [
-      "Dodat prikaz istorije promena u aplikaciji.",
-      "Vidite šta je novo direktno u aplikaciji nakon ažuriranja."
+      "Ispravljen problem sa prikazom prozora za pokretanje.",
+      "Prozori se sada ispravno prikazuju iznad svega."
     ]
   }
 }
