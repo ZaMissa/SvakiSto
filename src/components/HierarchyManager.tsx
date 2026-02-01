@@ -4,7 +4,7 @@ import { useLiveQuery } from 'dexie-react-hooks';
 import { db, type Station } from '../db/db'; // Ensure Group interface is exported if needed, or infer
 import FileExplorer from './FileTree/FileExplorer';
 import ContextMenu, { type ContextMenuAction } from './FileTree/ContextMenu';
-import StationCard from './StationCard';
+import StationActionPanel from './StationActionPanel';
 import { MonitorPlay, Search, ArrowDownAZ, Calendar, X, Plus, Tag } from 'lucide-react';
 import clsx from 'clsx';
 import Footer from './Footer';
@@ -210,36 +210,8 @@ export default function HierarchyManager() {
       {/* Main Content Area (Desktop) */}
       <div className="hidden md:flex flex-1 p-8 overflow-y-auto bg-slate-50 dark:bg-slate-950 items-center justify-center min-h-[500px]">
         {selectedStation ? (
-          <div className="w-full max-w-2xl space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-            <div>
-              <h2 className="text-3xl font-bold mb-2 text-slate-800 dark:text-white">{selectedStation.name}</h2>
-              <div className="flex items-center gap-2 text-slate-500">
-                <MonitorPlay size={18} />
-                <span className="font-mono text-lg">{selectedStation.anydeskId}</span>
-              </div>
-            </div>
-
-            <div className="scale-110 origin-top-left w-full">
-              <StationCard station={selectedStation} />
-            </div>
-
-            <div className="glass-card p-6 rounded-2xl space-y-4">
-              <h3 className="font-semibold border-b border-slate-100 dark:border-slate-700 pb-2 mb-2 text-slate-800 dark:text-slate-200">Statistics</h3>
-              <div className="grid grid-cols-2 gap-8 text-sm">
-                <div>
-                  <span className="block text-slate-500 mb-1">Created</span>
-                  <span className="font-medium text-slate-700 dark:text-slate-300">{new Date(selectedStation.createdAt).toLocaleDateString()}</span>
-                </div>
-                <div>
-                  <span className="block text-slate-500 mb-1">Usage Count</span>
-                  <span className="font-medium text-slate-700 dark:text-slate-300">{selectedStation.usageCount || 0}</span>
-                </div>
-                <div className="col-span-2">
-                  <span className="block text-slate-500 mb-1">Last Used</span>
-                  <span className="font-medium text-slate-700 dark:text-slate-300">{selectedStation.lastUsed ? new Date(selectedStation.lastUsed).toLocaleString() : 'Never'}</span>
-                </div>
-              </div>
-            </div>
+          <div className="w-full max-w-lg animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <StationActionPanel station={selectedStation} />
           </div>
         ) : (
           <div className="text-center text-slate-400 flex flex-col items-center">
@@ -263,9 +235,9 @@ export default function HierarchyManager() {
               <X size={20} />
             </button>
 
-            <h3 className="text-xl font-bold text-center pr-8">{t('Station Details')}</h3>
-            <div className="flex justify-center">
-              <StationCard station={selectedStation} />
+            {/* In Mobile Modal, render Action Panel directly */}
+            <div className="mt-4">
+              <StationActionPanel station={selectedStation} onClose={() => setSelectedStation(null)} />
             </div>
           </div>
         </div>

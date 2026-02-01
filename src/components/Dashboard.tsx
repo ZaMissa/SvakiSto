@@ -6,6 +6,9 @@ import StationCard from './StationCard';
 import FileExplorer from './FileTree/FileExplorer';
 import { Clock, TrendingUp, Search, Database, Plus } from 'lucide-react';
 
+import StationDrawer from './StationDrawer';
+import { type Station } from '../db/db';
+
 export default function Dashboard() {
   const { t } = useTranslation();
 
@@ -20,6 +23,7 @@ export default function Dashboard() {
 
   const [search, setSearch] = React.useState('');
   const [showAddModal, setShowAddModal] = React.useState(false);
+  const [selectedStation, setSelectedStation] = React.useState<Station | null>(null);
 
   const searchResults = useLiveQuery(async () => {
     if (!search) return [];
@@ -160,6 +164,7 @@ export default function Dashboard() {
                 station={station}
                 clientName={station.clientName}
                 objectName={station.objectName}
+                onClick={() => setSelectedStation(station)}
               />
             ))}
             {searchResults?.length === 0 && (
@@ -210,6 +215,13 @@ export default function Dashboard() {
           )}
         </>
       )}
+
+      {/* Station Drawer for Launch/Details */}
+      <StationDrawer
+        isOpen={!!selectedStation}
+        onClose={() => setSelectedStation(null)}
+        station={selectedStation}
+      />
     </div>
   );
 }
