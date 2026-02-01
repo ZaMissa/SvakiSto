@@ -7,6 +7,7 @@ import ContextMenu, { type ContextMenuAction } from './FileTree/ContextMenu';
 import StationCard from './StationCard';
 import { MonitorPlay, Search, ArrowDownAZ, Calendar, X, Plus, Tag } from 'lucide-react';
 import clsx from 'clsx';
+import Footer from './Footer';
 
 export default function HierarchyManager() {
   const { t } = useTranslation();
@@ -200,6 +201,9 @@ export default function HierarchyManager() {
             sortBy={sortBy}
             filterGroupId={selectedGroupId} // Pass filter
           />
+        </div>
+        <div className="shrink-0">
+          <Footer />
         </div>
       </div>
 

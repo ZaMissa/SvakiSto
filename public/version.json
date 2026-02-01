@@ -1,13 +1,13 @@
 {
-  "version": "1.3.8",
+  "version": "1.3.9",
   "notes": {
     "en": [
-      "Group names now scroll horizontally with mouse wheel.",
-      "Most frequently used groups are now shown first."
+      "Fixed Footer overlaying content in Manager View.",
+      "Improved layout stability."
     ],
     "sr": [
-      "Grupe se sada skroluju horizontalno pomoću točkića miša.",
-      "Najčešće korišćene grupe su sada prikazane prve."
+      "Popravljen problem gde je podnožje prekrivalo sadržaj u Menadžeru.",
+      "Poboljšana stabilnost izgleda."
     ]
   }
 }

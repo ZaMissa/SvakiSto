@@ -104,7 +104,7 @@ export default function Layout() {
 
         <div className="flex-1 p-4 md:p-8 overflow-y-auto">
           <Outlet />
-          <Footer />
+          {location.pathname !== '/manager' && <Footer />}
         </div>
 
         {/* Mobile Bottom Nav */}
