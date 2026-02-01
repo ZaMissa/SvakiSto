@@ -1,13 +1,89 @@
 {
-  "version": "1.3.14",
-  "notes": {
-    "en": [
-      "Refactored Station Card Interaction.",
-      "Simply click the card to open the Launch Modal."
-    ],
-    "sr": [
-      "Promenjen način interakcije sa karticama stanica.",
-      "Jednostavno kliknite na karticu da biste otvorili prozor za pokretanje."
-    ]
-  }
+  "latest": "1.3.15",
+  "history": [
+    {
+      "version": "1.3.15",
+      "date": "2026-02-01",
+      "notes": {
+        "en": [
+          "Changelog now shows full release history.",
+          "Check 'What's New' to see all past updates."
+        ],
+        "sr": [
+          "Istorija promena sada prikazuje sve prethodne verzije.",
+          "Proverite 'Šta je novo' da vidite sva ažuriranja."
+        ]
+      }
+    },
+    {
+      "version": "1.3.14",
+      "date": "2026-02-01",
+      "notes": {
+        "en": [
+          "Refactored Station Card Interaction.",
+          "Simply click the card to open the Launch Modal."
+        ],
+        "sr": [
+          "Promenjen način interakcije sa karticama stanica.",
+          "Jednostavno kliknite na karticu da biste otvorili prozor za pokretanje."
+        ]
+      }
+    },
+    {
+      "version": "1.3.13",
+      "date": "2026-02-01",
+      "notes": {
+        "en": [
+          "Fixed Z-Index issue with Launch Modal.",
+          "Modals now correctly appear on top of everything."
+        ],
+        "sr": [
+          "Ispravljen problem sa prikazom prozora za pokretanje.",
+          "Prozori se sada ispravno prikazuju iznad svega."
+        ]
+      }
+    },
+    {
+      "version": "1.3.12",
+      "date": "2026-02-01",
+      "notes": {
+        "en": [
+          "Added In-App Changelog.",
+          "See what's new directly in the app after an update."
+        ],
+        "sr": [
+          "Dodat prikaz istorije promena u aplikaciji.",
+          "Vidite šta je novo direktno u aplikaciji nakon ažuriranja."
+        ]
+      }
+    },
+    {
+      "version": "1.3.11",
+      "date": "2026-02-01",
+      "notes": {
+        "en": [
+          "Added Launch Modal with Password visibility.",
+          "See the password clearly before opening AnyDesk."
+        ],
+        "sr": [
+          "Dodat prozor za pokretanje sa prikazom lozinke.",
+          "Jasno vidite lozinku pre otvaranja AnyDesk-a."
+        ]
+      }
+    },
+    {
+      "version": "1.3.10",
+      "date": "2026-02-01",
+      "notes": {
+        "en": [
+          "Added Bulk Actions (Multi-select, Delete, Move).",
+          "Click 'Select' to manage multiple items at once."
+        ],
+        "sr": [
+          "Dodate masovne akcije (Višestruki izbor, Brisanje, Premeštanje).",
+          "Kliknite 'Izaberi' za upravljanje više stavki odjednom."
+        ]
+      }
+    }
+  ]
 }
