@@ -3,6 +3,7 @@ import { useTheme } from '../context/ThemeContext';
 
 import { Appearance } from './Settings/Appearance';
 import { DataManagement } from './Settings/DataManagement';
+import { BiometricsSettings } from './Settings/BiometricsSettings';
 import { UpdateManager } from './Settings/UpdateManager';
 
 import { APP_VERSION } from '../version';
@@ -22,6 +23,7 @@ export default function Settings() {
 
       <UpdateManager appVersion={APP_VERSION} />
       <Appearance theme={theme} setTheme={handleSetTheme} />
+      <BiometricsSettings />
       <DataManagement appVersion={APP_VERSION} />
     </div>
   );

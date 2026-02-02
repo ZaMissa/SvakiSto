@@ -5,11 +5,17 @@ import HierarchyManager from './components/HierarchyManager';
 import Settings from './components/SettingsView';
 import HelpView from './components/HelpView';
 
+import { AuthGuard } from './components/AuthGuard';
+
 function App() {
   return (
     <HashRouter>
       <Routes>
-        <Route path="/" element={<Layout />}>
+        <Route path="/" element={
+          <AuthGuard>
+            <Layout />
+          </AuthGuard>
+        }>
           <Route index element={<Dashboard />} />
           <Route path="manager" element={<HierarchyManager />} />
           <Route path="settings" element={<Settings />} />
