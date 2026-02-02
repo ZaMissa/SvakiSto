@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
@@ -89,9 +90,9 @@ export default function HelpView() {
               <li><strong>{t('frequentlyUsed')}:</strong> {t('help_dashboard_frequent')}</li>
               <li><strong>{t('search')}:</strong> {t('help_dashboard_search')}</li>
             </ul>
-            <a href="/" className="inline-block text-sm text-blue-500 hover:underline font-medium">
+            <Link to="/" className="inline-block text-sm text-blue-500 hover:underline font-medium">
               {t('Go to Dashboard')} →
-            </a>
+            </Link>
           </div>
         </details>
 
@@ -112,9 +113,9 @@ export default function HelpView() {
                 <li>{t('help_manager_rclick_station')}</li>
               </ul>
             </div>
-            <a href="/manager" className="inline-block text-sm text-blue-500 hover:underline font-medium">
+            <Link to="/manager" className="inline-block text-sm text-blue-500 hover:underline font-medium">
               {t('Go to Manager')} →
-            </a>
+            </Link>
           </div>
         </details>
 
@@ -153,9 +154,9 @@ export default function HelpView() {
               <ShieldCheck size={16} />
               <span>{t('password')} & {t('Encrypted Backup')}</span>
             </div>
-            <a href="/settings" className="inline-block text-sm text-blue-500 hover:underline font-medium">
+            <Link to="/settings" className="inline-block text-sm text-blue-500 hover:underline font-medium">
               {t('Go to Settings')} →
-            </a>
+            </Link>
           </div>
         </details>
       </div>
