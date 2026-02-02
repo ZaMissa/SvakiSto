@@ -25,6 +25,8 @@ export const DataManagement: React.FC<DataManagementProps> = ({ appVersion }) =>
   const [, setImportFile] = useState<File | null>(null);
 
   // --- CLEAR DATA ---
+  const [clearPassword, setClearPassword] = useState(false);
+
   const handleClearData = async () => {
     if (confirm(t("DANGER: This will delete ALL your data"))) {
       await db.transaction('rw', db.clients, db.objects, db.stations, db.groups, async () => {
@@ -33,7 +35,14 @@ export const DataManagement: React.FC<DataManagementProps> = ({ appVersion }) =>
         await db.stations.clear();
         await db.groups.clear();
       });
-      alert(t("All data has been cleared."));
+
+      if (clearPassword) {
+        localStorage.removeItem('default_backup_password');
+        // Force reload to trigger security modal again if needed
+        window.location.reload();
+      } else {
+        alert(t("All data has been cleared."));
+      }
     }
   };
 
@@ -174,7 +183,17 @@ export const DataManagement: React.FC<DataManagementProps> = ({ appVersion }) =>
             </label>
           </div>
 
-          <div className="pt-4 border-t border-slate-100 dark:border-slate-700">
+          <div className="pt-4 border-t border-slate-100 dark:border-slate-700 space-y-3">
+            <label className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400 cursor-pointer w-fit mx-auto">
+              <input
+                type="checkbox"
+                checked={clearPassword}
+                onChange={(e) => setClearPassword(e.target.checked)}
+                className="rounded border-slate-300 dark:border-slate-600 text-red-500 focus:ring-red-500"
+              />
+              {t('clearSecurityPassword')}
+            </label>
+
             <button onClick={handleClearData} className="w-full flex items-center justify-center gap-2 bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400 py-3 rounded-xl hover:bg-red-200 dark:hover:bg-red-900/40 transition-colors">
               <Trash2 size={20} />
               {t('Clear App Data')}

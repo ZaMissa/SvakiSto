@@ -147,6 +147,7 @@ i18n
           "Change Default": "Change Default",
           "Export password is REQUIRED. Please set a password to secure your data.": "Export password is REQUIRED. Please set a password to secure your data.",
           "Export failed": "Export failed",
+          "clearSecurityPassword": "Clear default security password",
 
           // Tutorial Game
           "Tutorial: The Organizer Game": "Tutorial: The Organizer Game",
@@ -294,7 +295,8 @@ i18n
           "Enter new default backup password:": "Unesite novu podrazumevanu lozinku za kopije:",
           "Change Default": "Promeni podrazumevanu",
           "Export password is REQUIRED. Please set a password to secure your data.": "Lozinka za izvoz je OBAVEZNA. Molimo postavite lozinku da biste osigurali podatke.",
-          "Export failed": "Izvoz neuspešan",
+          "Export failed": "Export failed",
+          "clearSecurityPassword": "Clear default security password",
 
           // Tutorial Game SR
           "Tutorial: The Organizer Game": "Tutorijal: Igra Organizatora",
