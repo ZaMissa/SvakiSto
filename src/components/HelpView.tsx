@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   LayoutDashboard,
@@ -6,11 +7,62 @@ import {
   MousePointer2,
   ShieldCheck,
   MonitorPlay,
-  Key
+  Key,
+  Gamepad2,
+  Play,
+  CheckCircle2,
+  AlertTriangle
 } from 'lucide-react';
+import { TUTORIAL_DATA, checkTutorialSolution } from '../data/tutorialData';
+import { db } from '../db/db';
+import { importData, createInternalBackup } from '../utils/exportUtils';
+import { APP_VERSION } from '../version';
 
 export default function HelpView() {
   const { t } = useTranslation();
+  const [gameStatus, setGameStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  const [gameMessage, setGameMessage] = useState('');
+
+  const startTutorial = async () => {
+    if (!window.confirm("This will BACKUP your current data internally and replace it with the Tutorial dataset. Are you sure?")) return;
+
+    try {
+      // 1. Backup
+      await createInternalBackup(APP_VERSION);
+
+      // 2. Wipe & Import
+      await db.transaction('rw', db.clients, db.objects, db.stations, db.groups, async () => {
+        await db.clients.clear();
+        await db.objects.clear();
+        await db.stations.clear();
+        await db.groups.clear();
+      });
+
+      await importData(JSON.stringify(TUTORIAL_DATA));
+      alert("Tutorial Loaded! Go to Manager view and fix the mess!");
+      setGameStatus('idle');
+      setGameMessage('');
+    } catch (e) {
+      console.error(e);
+      alert("Failed to start tutorial.");
+    }
+  };
+
+  const checkSolution = async () => {
+    try {
+      const errors = await checkTutorialSolution(db);
+      if (errors.length === 0) {
+        setGameStatus('success');
+        setGameMessage("Great Job! The office is organized!");
+        // Confetti here ideally
+      } else {
+        setGameStatus('error');
+        setGameMessage(errors[0]); // Show first error hint
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
 
   return (
     <div className="max-w-3xl mx-auto space-y-8 pb-20">
