@@ -1,6 +1,25 @@
 {
-  "latest": "1.3.18",
+  "latest": "1.4.0",
   "history": [
+    {
+      "version": "1.4.0",
+      "date": "2026-02-02",
+      "silent": false,
+      "notes": {
+        "en": [
+          "Feature: Biometric Privacy Lock (FaceID/TouchID/Windows Hello).",
+          "Feature: New Help Docs & 'Mobile Experience' Guide.",
+          "Feature: Update Indicator Badge.",
+          "Polish: Verified Station Card Interactions and Launch Flows."
+        ],
+        "sr": [
+          "Funkcija: Biometrijsko zaključavanje (FaceID/Otisak/Windows Hello).",
+          "Funkcija: Nova uputstva za pomoć i vodič za mobilne uređaje.",
+          "Funkcija: Oznaka za dostupna ažuriranja.",
+          "Poliranje: Verifikovane interakcije sa karticama stanica."
+        ]
+      }
+    },
     {
       "version": "1.3.18",
       "date": "2026-02-02",
