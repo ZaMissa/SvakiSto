@@ -39,6 +39,10 @@ export const DataManagement: React.FC<DataManagementProps> = ({ appVersion }) =>
 
   // --- EXPORT ---
   const handleExport = async () => {
+    if (!password) {
+      alert(t("Export password is REQUIRED. Please set a password to secure your data."));
+      return;
+    }
     try {
       const data = await generateBackupData(appVersion);
       await downloadBackup(data, password, filename || "svakisto_backup");
@@ -143,7 +147,7 @@ export const DataManagement: React.FC<DataManagementProps> = ({ appVersion }) =>
             </div>
             <div className="flex-1">
               <div className="flex justify-between items-center mb-1">
-                <label className="block text-sm text-slate-500">Password</label>
+                <label className="block text-sm font-bold text-slate-700 dark:text-slate-300">Password <span className="text-red-500">*</span></label>
                 <button onClick={handleUpdateDefaultPassword} className="text-xs text-blue-500 hover:underline">
                   {t('Change Default')}
                 </button>

@@ -8,9 +8,28 @@ import clsx from 'clsx';
 import Footer from './Footer';
 import { useUpdateNotification } from '../hooks/useUpdateNotification';
 
+import { SecuritySetupModal } from './SecuritySetupModal';
+
 export default function Layout() {
   const { t } = useTranslation();
   const { hasUnseenUpdate, markAsSeen } = useUpdateNotification();
+
+  // Security Setup Logic
+  const [showSecuritySetup, setShowSecuritySetup] = useState(false);
+
+  useEffect(() => {
+    // Check if security password is set
+    const defaultPwd = localStorage.getItem('default_backup_password');
+    if (!defaultPwd) {
+      // Immediate check, no delay
+      setShowSecuritySetup(true);
+    }
+  }, []);
+
+  const handleSecuritySetupComplete = (password: string) => {
+    localStorage.setItem('default_backup_password', password);
+    setShowSecuritySetup(false);
+  };
 
   const navItems = [
     { to: "/", icon: LayoutDashboard, label: t('dashboard') },
@@ -19,7 +38,7 @@ export default function Layout() {
     { to: "/help", icon: CircleHelp, label: t('help') || 'Help' },
   ];
 
-  // Swipe Logic
+  // ... (Swipe Logic)
   const navigate = useNavigate();
   const location = useLocation();
   const [touchStart, setTouchStart] = useState<number | null>(null);
@@ -49,40 +68,21 @@ export default function Layout() {
     if (currentIndex === -1) return;
 
     if (isLeftSwipe) {
-      // Move Next (Forward)
       if (currentIndex < navItems.length - 1) {
         navigate(navItems[currentIndex + 1].to);
       }
     } else if (isRightSwipe) {
-      // Move Previous (Backward)
       if (currentIndex > 0) {
         navigate(navItems[currentIndex - 1].to);
       }
     }
   };
 
-  // Changelog Logic
+  // ... (Changelog Logic)
   const [showChangelog, setShowChangelog] = useState(false);
   useEffect(() => {
-    // Check if we have seen this version's changelog via the notification hook logic
-    // OR we can keep the separate "auto-pop" logic if desired. 
-    // The user said: "notification point... as long as user dont see"... implies if they SEE it via modal, it clears.
-
-    // Auto-pop logic:
-    // If we have a FRESH update (APP_VERSION changed), we might still want to pop it?
-    // User requirement: "send updates that user is needed to acknowledge before update available dissapears"
-    // This implies manual acknowledgement.
-    // Let's rely on the Red Dot mostly, but maybe Auto-Pop is still friendly?
-    // Let's keep Auto-Pop but make sure it calls markAsSeen.
-
     const lastAutoPop = localStorage.getItem('last_autopop_version');
     if (lastAutoPop !== APP_VERSION) {
-      // Only auto-pop if NOT silent?
-      // We'd need to fetch version.json here to know if silent.
-      // The hook does that.
-      // Simplified: Let's Auto-Pop. If the user closes it, we mark seen.
-      // If it's silent, maybe we shouldn't Auto-Pop? 
-      // For now, let's just Auto-Pop on version change (client side detection).
       setTimeout(() => setShowChangelog(true), 1000);
       localStorage.setItem('last_autopop_version', APP_VERSION);
     }
@@ -97,10 +97,14 @@ export default function Layout() {
     <div
       className="min-h-screen flex flex-col md:flex-row"
       onContextMenu={(e) => {
-        // Prevent default browser context menu globally
         e.preventDefault();
       }}
     >
+      <SecuritySetupModal
+        isOpen={showSecuritySetup}
+        onClose={handleSecuritySetupComplete}
+        isInitialSetup={true}
+      />
       <ChangelogModal isOpen={showChangelog} onClose={handleChangelogClose} />
       {/* Desktop Sidebar */}
       <aside className="hidden md:flex flex-col w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-700 p-4">
