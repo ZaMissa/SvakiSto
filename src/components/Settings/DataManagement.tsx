@@ -47,7 +47,7 @@ export const DataManagement: React.FC<DataManagementProps> = ({ appVersion }) =>
       const data = await generateBackupData(appVersion);
       await downloadBackup(data, password, filename || "svakisto_backup");
     } catch (e) {
-      alert("Export failed");
+      alert(t("Export failed"));
     }
   };
 

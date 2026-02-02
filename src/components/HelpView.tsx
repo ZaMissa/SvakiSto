@@ -24,7 +24,7 @@ export default function HelpView() {
   const [gameMessage, setGameMessage] = useState('');
 
   const startTutorial = async () => {
-    if (!window.confirm("This will BACKUP your current data internally and replace it with the Tutorial dataset. Are you sure?")) return;
+    if (!window.confirm(t("tutorial_confirm_backup"))) return;
 
     try {
       // 1. Backup
@@ -39,12 +39,12 @@ export default function HelpView() {
       });
 
       await importData(JSON.stringify(TUTORIAL_DATA));
-      alert("Tutorial Loaded! Go to Manager view and fix the mess!");
+      alert(t("tutorial_loaded"));
       setGameStatus('idle');
       setGameMessage('');
     } catch (e) {
       console.error(e);
-      alert("Failed to start tutorial.");
+      alert(t("tutorial_failed"));
     }
   };
 
@@ -161,14 +161,14 @@ export default function HelpView() {
       <section className="space-y-4 pt-8 border-t-2 border-dashed border-slate-200 dark:border-slate-800">
         <div className="flex items-center gap-3 text-purple-600 dark:text-purple-400 pb-2">
           <Gamepad2 size={28} />
-          <h2 className="text-2xl font-bold">Tutorial: The Organizer Game</h2>
+          <h2 className="text-2xl font-bold">{t('Tutorial: The Organizer Game')}</h2>
         </div>
 
         <div className="bg-purple-50 dark:bg-purple-900/20 p-6 rounded-2xl border border-purple-100 dark:border-purple-800 space-y-4">
           <p className="text-slate-700 dark:text-slate-300">
-            Want to master Bulk Actions, Drag & Drop, and Grouping? Play this mini-game!
+            {t('help_tutorial_desc')}
             <br />
-            <strong>Objective:</strong> The office data is scrambled. Move Clients to their correct Departments (Groups) and put Stations in the right Rooms (Objects).
+            <strong>{t('help_tutorial_objective')}</strong>
           </p>
 
           <div className="flex gap-4 flex-wrap">
@@ -177,7 +177,7 @@ export default function HelpView() {
               className="flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-xl font-bold shadow-lg shadow-purple-500/20 transition-all active:scale-95"
             >
               <Play size={20} />
-              Start Tutorial
+              {t('Start Tutorial')}
             </button>
 
             <button
@@ -185,7 +185,7 @@ export default function HelpView() {
               className="flex items-center gap-2 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 px-6 py-3 rounded-xl font-bold hover:bg-slate-50 dark:hover:bg-slate-700 transition-all active:scale-95"
             >
               <CheckCircle2 size={20} className="text-green-500" />
-              Check Solution
+              {t('Check Solution')}
             </button>
           </div>
 

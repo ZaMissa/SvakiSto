@@ -130,7 +130,34 @@ i18n
           "Copy": "Copy",
           "What's New": "What's New",
           "Awesome!": "Awesome!",
-          "No release notes available.": "No release notes available."
+          "No release notes available.": "No release notes available.",
+
+          // Security & Data Management
+          "Setup Security": "Setup Security",
+          "Change Security Password": "Change Security Password",
+          "To protect your Anydesk credentials, please set a default password for all your Data Backups.": "To protect your Anydesk credentials, please set a default password for all your Data Backups.",
+          "Update your default encryption password.": "Update your default encryption password.",
+          "Create Password": "Create Password",
+          "Confirm Password": "Confirm Password",
+          "Password must be at least 4 characters": "Password must be at least 4 characters",
+          "Passwords do not match": "Passwords do not match",
+          "Save & Secure": "Save & Secure",
+          "Default password updated!": "Default password updated!",
+          "Enter new default backup password:": "Enter new default backup password:",
+          "Change Default": "Change Default",
+          "Export password is REQUIRED. Please set a password to secure your data.": "Export password is REQUIRED. Please set a password to secure your data.",
+          "Export failed": "Export failed",
+
+          // Tutorial Game
+          "Tutorial: The Organizer Game": "Tutorial: The Organizer Game",
+          "help_tutorial_desc": "Want to master Bulk Actions, Drag & Drop, and Grouping? Play this mini-game!",
+          "help_tutorial_objective": "Objective: The office data is scrambled. Move Clients to their correct Departments (Groups) and put Stations in the right Rooms (Objects).",
+          "Start Tutorial": "Start Tutorial",
+          "Check Solution": "Check Solution",
+          "Great Job! The office is organized!": "Great Job! The office is organized!",
+          "tutorial_confirm_backup": "This will BACKUP your current data internally and replace it with the Tutorial dataset. Are you sure?",
+          "tutorial_loaded": "Tutorial Loaded! Go to Manager view and fix the mess!",
+          "tutorial_failed": "Failed to start tutorial."
         }
       },
       sr: {
@@ -251,7 +278,34 @@ i18n
           "Copy": "Kopiraj",
           "What's New": "Šta je novo",
           "Awesome!": "Sjajno!",
-          "No release notes available.": "Nema dostupnih beleški o izdanju."
+          "No release notes available.": "Nema dostupnih beleški o izdanju.",
+
+          // Security & Data Management SR
+          "Setup Security": "Podešavanje zaštite",
+          "Change Security Password": "Promena lozinke zaštite",
+          "To protect your Anydesk credentials, please set a default password for all your Data Backups.": "Da biste zaštitili svoje Anydesk podatke, molimo postavite podrazumevanu lozinku za sve rezervne kopije podataka.",
+          "Update your default encryption password.": "Ažurirajte podrazumevanu lozinku za enkripciju.",
+          "Create Password": "Kreiraj lozinku",
+          "Confirm Password": "Potvrdi lozinku",
+          "Password must be at least 4 characters": "Lozinka mora imati namjanje 4 karaktera",
+          "Passwords do not match": "Lozinke se ne podudaraju",
+          "Save & Secure": "Sačuvaj i Osiguraj",
+          "Default password updated!": "Podrazumevana lozinka ažurirana!",
+          "Enter new default backup password:": "Unesite novu podrazumevanu lozinku za kopije:",
+          "Change Default": "Promeni podrazumevanu",
+          "Export password is REQUIRED. Please set a password to secure your data.": "Lozinka za izvoz je OBAVEZNA. Molimo postavite lozinku da biste osigurali podatke.",
+          "Export failed": "Izvoz neuspešan",
+
+          // Tutorial Game SR
+          "Tutorial: The Organizer Game": "Tutorijal: Igra Organizatora",
+          "help_tutorial_desc": "Želite da savladate Masovne akcije, Prevlačenje i Grupisanje? Igrajte ovu mini-igru!",
+          "help_tutorial_objective": "Cilj: Podaci su izmešani. Premestite Klijente u njihova odeljenja (Grupe) i postavite Stanice u prave sobe (Objekte).",
+          "Start Tutorial": "Pokreni Tutorijal",
+          "Check Solution": "Proveri Rešenje",
+          "Great Job! The office is organized!": "Odličan posao! Kancelarija je organizovana!",
+          "tutorial_confirm_backup": "Ovo će napraviti INTERNU KOPIJU vaših trenutnih podataka i zameniti ih Tutorijal podacima. Da li ste sigurni?",
+          "tutorial_loaded": "Tutorijal učitan! Idite u Menadžer pregled i sredite haos!",
+          "tutorial_failed": "Neuspešno pokretanje tutorijala."
         }
       }
     }
