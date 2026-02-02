@@ -12,7 +12,8 @@ import {
   Gamepad2,
   Play,
   CheckCircle2,
-  AlertTriangle
+  AlertTriangle,
+  Smartphone
 } from 'lucide-react';
 import { TUTORIAL_DATA, checkTutorialSolution } from '../data/tutorialData';
 import { db } from '../db/db';
@@ -157,6 +158,23 @@ export default function HelpView() {
             <Link to="/settings" className="inline-block text-sm text-blue-500 hover:underline font-medium">
               {t('Go to Settings')} →
             </Link>
+          </div>
+        </details>
+
+        {/* 5. Mobile Experience */}
+        <details className="group glass-card rounded-2xl p-4 open:bg-white dark:open:bg-slate-800 transition-all">
+          <summary className="flex items-center gap-3 cursor-pointer font-bold text-lg text-slate-800 dark:text-white list-none">
+            <Smartphone size={24} className="text-anydesk group-open:rotate-12 transition-transform" />
+            <span className="flex-1">{t('help_mobile_title')}</span>
+            <span className="text-slate-400 text-sm group-open:rotate-180 transition-transform">▼</span>
+          </summary>
+          <div className="mt-4 pl-9 space-y-4 text-slate-600 dark:text-slate-300 animate-in slide-in-from-top-2">
+            <p>{t('help_mobile_desc')}</p>
+            <ul className="list-disc pl-5 space-y-2 mt-2 text-sm">
+              <li>{t('help_mobile_1')}</li>
+              <li>{t('help_mobile_2')}</li>
+              <li>{t('help_mobile_3')}</li>
+            </ul>
           </div>
         </details>
       </div>
