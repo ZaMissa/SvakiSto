@@ -1,5 +1,5 @@
-import { type AppExportData } from '../utils/exportUtils';
-import { type Client, type Group, type Object, type Station } from '../db/db';
+import { type BackupData } from '../utils/exportUtils';
+
 
 // Tutorial: "The Messy Office"
 // Goal: Organize Items into correct Clients/Groups.
@@ -11,9 +11,12 @@ import { type Client, type Group, type Object, type Station } from '../db/db';
 // Clients are mixed up.
 // Stations are mixed up.
 
-export const TUTORIAL_DATA: AppExportData = {
-  version: "1.1.0",
-  timestamp: new Date().toISOString(),
+export const TUTORIAL_DATA: BackupData = {
+  meta: {
+    version: "1.1.0",
+    date: new Date().toISOString(),
+    exportedBy: "Tutorial Mode"
+  },
   groups: [
     { id: 1, name: "Unsorted", usageCount: 100 },
     { id: 2, name: "IT Dept", usageCount: 0 },

@@ -157,6 +157,54 @@ export default function HelpView() {
         </div>
       </section>
 
+      {/* 5. Tutorial Game */}
+      <section className="space-y-4 pt-8 border-t-2 border-dashed border-slate-200 dark:border-slate-800">
+        <div className="flex items-center gap-3 text-purple-600 dark:text-purple-400 pb-2">
+          <Gamepad2 size={28} />
+          <h2 className="text-2xl font-bold">Tutorial: The Organizer Game</h2>
+        </div>
+
+        <div className="bg-purple-50 dark:bg-purple-900/20 p-6 rounded-2xl border border-purple-100 dark:border-purple-800 space-y-4">
+          <p className="text-slate-700 dark:text-slate-300">
+            Want to master Bulk Actions, Drag & Drop, and Grouping? Play this mini-game!
+            <br />
+            <strong>Objective:</strong> The office data is scrambled. Move Clients to their correct Departments (Groups) and put Stations in the right Rooms (Objects).
+          </p>
+
+          <div className="flex gap-4 flex-wrap">
+            <button
+              onClick={startTutorial}
+              className="flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-xl font-bold shadow-lg shadow-purple-500/20 transition-all active:scale-95"
+            >
+              <Play size={20} />
+              Start Tutorial
+            </button>
+
+            <button
+              onClick={checkSolution}
+              className="flex items-center gap-2 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 px-6 py-3 rounded-xl font-bold hover:bg-slate-50 dark:hover:bg-slate-700 transition-all active:scale-95"
+            >
+              <CheckCircle2 size={20} className="text-green-500" />
+              Check Solution
+            </button>
+          </div>
+
+          {gameStatus === 'success' && (
+            <div className="p-4 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 rounded-xl flex items-center gap-3 font-bold animate-pulse">
+              <CheckCircle2 size={24} />
+              {gameMessage}
+            </div>
+          )}
+
+          {gameStatus === 'error' && (
+            <div className="p-4 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 rounded-xl flex items-center gap-3 font-medium">
+              <AlertTriangle size={24} />
+              {gameMessage}
+            </div>
+          )}
+        </div>
+      </section>
+
     </div>
   );
 }

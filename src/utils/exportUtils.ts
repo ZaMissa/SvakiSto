@@ -69,3 +69,24 @@ export const createInternalBackup = async (version: string) => {
   });
   return true;
 };
+
+export const importData = async (jsonString: string) => {
+  const data: BackupData = JSON.parse(jsonString);
+
+  // Basic validation
+  if (!data.clients || !data.objects || !data.stations) {
+    throw new Error("Invalid Data Format");
+  }
+
+  await db.transaction('rw', db.clients, db.objects, db.stations, db.groups, async () => {
+    await db.clients.clear();
+    await db.objects.clear();
+    await db.stations.clear();
+    await db.groups.clear();
+
+    await db.clients.bulkAdd(data.clients || []);
+    await db.objects.bulkAdd(data.objects || []);
+    await db.stations.bulkAdd(data.stations || []);
+    await db.groups.bulkAdd(data.groups || []);
+  });
+};
