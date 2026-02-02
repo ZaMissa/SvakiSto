@@ -6,14 +6,16 @@ import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { LayoutDashboard, Database, Settings, CircleHelp } from 'lucide-react';
 import clsx from 'clsx';
 import Footer from './Footer';
+import { useUpdateNotification } from '../hooks/useUpdateNotification';
 
 export default function Layout() {
   const { t } = useTranslation();
+  const { hasUnseenUpdate, markAsSeen } = useUpdateNotification();
 
   const navItems = [
     { to: "/", icon: LayoutDashboard, label: t('dashboard') },
     { to: "/manager", icon: Database, label: t('Manager') },
-    { to: "/settings", icon: Settings, label: t('settings') },
+    { to: "/settings", icon: Settings, label: t('settings'), badge: hasUnseenUpdate },
     { to: "/help", icon: CircleHelp, label: t('help') || 'Help' },
   ];
 
@@ -62,22 +64,34 @@ export default function Layout() {
   // Changelog Logic
   const [showChangelog, setShowChangelog] = useState(false);
   useEffect(() => {
-    // Check if we have seen this version's changelog
-    const lastVersion = localStorage.getItem('last_seen_version');
+    // Check if we have seen this version's changelog via the notification hook logic
+    // OR we can keep the separate "auto-pop" logic if desired. 
+    // The user said: "notification point... as long as user dont see"... implies if they SEE it via modal, it clears.
 
-    // If no last version (first run) or different version, show changelog
-    // Option: Don't show on very first install? Usually 'last_seen_version' is null.
-    // Let's show it so they see "What's New" or welcome features.
-    // Or better: If null, maybe just set it to current?
-    // User requested: "show changelog on update".
-    // If I just installed 1.3.11, I want to see features.
+    // Auto-pop logic:
+    // If we have a FRESH update (APP_VERSION changed), we might still want to pop it?
+    // User requirement: "send updates that user is needed to acknowledge before update available dissapears"
+    // This implies manual acknowledgement.
+    // Let's rely on the Red Dot mostly, but maybe Auto-Pop is still friendly?
+    // Let's keep Auto-Pop but make sure it calls markAsSeen.
 
-    if (lastVersion !== APP_VERSION) {
-      // Small delay to ensure app is ready/Animation smooth
+    const lastAutoPop = localStorage.getItem('last_autopop_version');
+    if (lastAutoPop !== APP_VERSION) {
+      // Only auto-pop if NOT silent?
+      // We'd need to fetch version.json here to know if silent.
+      // The hook does that.
+      // Simplified: Let's Auto-Pop. If the user closes it, we mark seen.
+      // If it's silent, maybe we shouldn't Auto-Pop? 
+      // For now, let's just Auto-Pop on version change (client side detection).
       setTimeout(() => setShowChangelog(true), 1000);
-      localStorage.setItem('last_seen_version', APP_VERSION);
+      localStorage.setItem('last_autopop_version', APP_VERSION);
     }
   }, []);
+
+  const handleChangelogClose = () => {
+    setShowChangelog(false);
+    markAsSeen();
+  };
 
   return (
     <div
@@ -87,7 +101,7 @@ export default function Layout() {
         e.preventDefault();
       }}
     >
-      <ChangelogModal isOpen={showChangelog} onClose={() => setShowChangelog(false)} />
+      <ChangelogModal isOpen={showChangelog} onClose={handleChangelogClose} />
       {/* Desktop Sidebar */}
       <aside className="hidden md:flex flex-col w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-700 p-4">
         <div className="mb-8 flex items-center gap-2 text-anydesk font-bold text-xl">
@@ -100,7 +114,7 @@ export default function Layout() {
               key={item.to}
               to={item.to}
               className={({ isActive }) => clsx(
-                "flex items-center gap-3 px-4 py-3 rounded-xl transition-all font-medium",
+                "flex items-center gap-3 px-4 py-3 rounded-xl transition-all font-medium relative",
                 isActive
                   ? "bg-anydesk text-white shadow-lg shadow-anydesk/30"
                   : "text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800"
@@ -108,6 +122,10 @@ export default function Layout() {
             >
               <item.icon size={20} />
               {item.label}
+              {/* Badge */}
+              {item.badge && (
+                <span className="absolute right-3 top-1/2 -translate-y-1/2 w-2.5 h-2.5 bg-red-500 rounded-full shadow-sm animate-pulse" />
+              )}
             </NavLink>
           ))}
         </nav>
@@ -137,13 +155,18 @@ export default function Layout() {
               key={item.to}
               to={item.to}
               className={({ isActive }) => clsx(
-                "flex flex-col items-center gap-1 p-2 rounded-lg transition-colors",
+                "flex flex-col items-center gap-1 p-2 rounded-lg transition-colors relative",
                 isActive
                   ? "text-anydesk"
                   : "text-slate-400"
               )}
             >
-              <item.icon size={20} />
+              <div className="relative">
+                <item.icon size={20} />
+                {item.badge && (
+                  <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white dark:border-slate-900" />
+                )}
+              </div>
               <span className="text-xs font-medium">{item.label}</span>
             </NavLink>
           ))}
