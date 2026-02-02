@@ -14,7 +14,8 @@ import {
   CheckCircle2,
   AlertTriangle,
   Smartphone,
-  Activity
+  Activity,
+  Fingerprint
 } from 'lucide-react';
 import { TUTORIAL_DATA, checkTutorialSolution } from '../data/tutorialData';
 import { db } from '../db/db';
@@ -180,6 +181,24 @@ export default function HelpView() {
               <li>{t('help_mobile_2')}</li>
               <li>{t('help_mobile_3')}</li>
             </ul>
+          </div>
+        </details>
+
+        {/* 6. Biometrics */}
+        <details className="group glass-card rounded-2xl p-4 open:bg-white dark:open:bg-slate-800 transition-all">
+          <summary className="flex items-center gap-3 cursor-pointer font-bold text-lg text-slate-800 dark:text-white list-none">
+            <Fingerprint size={24} className="text-anydesk group-open:rotate-12 transition-transform" />
+            <span className="flex-1">{t('help_biometrics_title')}</span>
+            <span className="text-slate-400 text-sm group-open:rotate-180 transition-transform">▼</span>
+          </summary>
+          <div className="mt-4 pl-9 space-y-4 text-slate-600 dark:text-slate-300 animate-in slide-in-from-top-2">
+            <p>{t('help_biometrics_desc')}</p>
+            <div className="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-xl text-sm border border-purple-100 dark:border-purple-800">
+              <ul className="list-disc pl-5 space-y-1">
+                <li>{t('biometric_enable_desc')}</li>
+                <li>{t('biometric_active_msg')}</li>
+              </ul>
+            </div>
           </div>
         </details>
       </div>

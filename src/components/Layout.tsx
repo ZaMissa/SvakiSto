@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { APP_VERSION } from '../version';
 import ChangelogModal from './ChangelogModal';
+import BiometricPromoModal from './BiometricPromoModal';
 import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { LayoutDashboard, Database, Settings, CircleHelp } from 'lucide-react';
 import clsx from 'clsx';
@@ -106,6 +107,7 @@ export default function Layout() {
         isInitialSetup={true}
       />
       <ChangelogModal isOpen={showChangelog} onClose={handleChangelogClose} />
+      <BiometricPromoModal />
       {/* Desktop Sidebar */}
       <aside className="hidden md:flex flex-col w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-700 p-4">
         <div className="mb-8 flex items-center gap-2 text-anydesk font-bold text-xl">

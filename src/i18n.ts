@@ -184,6 +184,14 @@ i18n
           "biometric_lock_desc": "Authentication required to access your workspace.",
           "biometric_unlock_failed": "Authentication failed. Please try again.",
 
+          // Biometric Promo
+          "biometric_promo_title": "Protect your Privacy",
+          "biometric_promo_desc": "Secure your app with FaceID, TouchID, or Windows Hello. Prevent unauthorized access on this device.",
+          "Enable Now": "Enable Now",
+          "Maybe Later": "Maybe Later",
+          "help_biometrics_title": "Biometrics",
+          "help_biometrics_desc": "Privacy Lock with FaceID/TouchID.",
+
           "security_greet_title": "Welcome to SvakiSto!",
           "security_greet_desc": "Let's secure your workspace before we begin.",
           "Back": "Back",
@@ -371,6 +379,14 @@ i18n
           "Unlock with Biometrics": "Otključaj",
           "biometric_lock_desc": "Potrebna je autentifikacija za pristup radnom prostoru.",
           "biometric_unlock_failed": "Autentifikacija neuspešna. Pokušajte ponovo.",
+
+          // Biometric Promo SR
+          "biometric_promo_title": "Zaštitite svoju Privatnost",
+          "biometric_promo_desc": "Osigurajte aplikaciju pomoću FaceID-a, otiska prsta ili Windows Hello. Sprečite neovlašćen pristup.",
+          "Enable Now": "Uključi Odmah",
+          "Maybe Later": "Možda Kasnije",
+          "help_biometrics_title": "Biometrija",
+          "help_biometrics_desc": "Privatno zaključavanje pomoću FaceID/TouchID-a.",
 
           "security_greet_title": "Dobrodošli u SvakiSto!",
           "security_greet_desc": "Hajde da osiguramo vaš radni prostor pre nego što počnemo.",
