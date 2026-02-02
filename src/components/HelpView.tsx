@@ -73,89 +73,92 @@ export default function HelpView() {
         </p>
       </header>
 
-      {/* 1. Dashboard */}
-      <section className="space-y-4">
-        <div className="flex items-center gap-3 text-anydesk border-b border-slate-200 dark:border-slate-700 pb-2">
-          <LayoutDashboard size={24} />
-          <h2 className="text-xl font-bold">{t('help_dashboard_title')}</h2>
-        </div>
-        <div className="prose dark:prose-invert text-slate-600 dark:text-slate-300">
-          <p>{t('help_dashboard_desc')}</p>
-          <ul className="list-disc pl-5 space-y-2 mt-2">
-            <li><strong>{t('lastUsed')}:</strong> {t('help_dashboard_last_used')}</li>
-            <li><strong>{t('frequentlyUsed')}:</strong> {t('help_dashboard_frequent')}</li>
-            <li><strong>{t('search')}:</strong> {t('help_dashboard_search')}</li>
-            <li>
-              <strong>{t('newStation')}:</strong> {t('help_dashboard_quick_add')}
-            </li>
-          </ul>
-        </div>
-      </section>
+      {/* Interactive Help Sections */}
+      <div className="space-y-4">
+        {/* 1. Dashboard */}
+        <details className="group glass-card rounded-2xl p-4 open:bg-white dark:open:bg-slate-800 transition-all">
+          <summary className="flex items-center gap-3 cursor-pointer font-bold text-lg text-slate-800 dark:text-white list-none">
+            <LayoutDashboard size={24} className="text-anydesk group-open:rotate-12 transition-transform" />
+            <span className="flex-1">{t('help_nav_dashboard')}</span>
+            <span className="text-slate-400 text-sm group-open:rotate-180 transition-transform">▼</span>
+          </summary>
+          <div className="mt-4 pl-9 space-y-4 text-slate-600 dark:text-slate-300 animate-in slide-in-from-top-2">
+            <p>{t('help_full_dashboard')}</p>
+            <ul className="list-disc pl-5 space-y-1 text-sm">
+              <li><strong>{t('lastUsed')}:</strong> {t('help_dashboard_last_used')}</li>
+              <li><strong>{t('frequentlyUsed')}:</strong> {t('help_dashboard_frequent')}</li>
+              <li><strong>{t('search')}:</strong> {t('help_dashboard_search')}</li>
+            </ul>
+            <a href="/" className="inline-block text-sm text-blue-500 hover:underline font-medium">
+              {t('Go to Dashboard')} →
+            </a>
+          </div>
+        </details>
 
-      {/* 2. File Manager */}
-      <section className="space-y-4">
-        <div className="flex items-center gap-3 text-anydesk border-b border-slate-200 dark:border-slate-700 pb-2">
-          <Database size={24} />
-          <h2 className="text-xl font-bold">{t('help_manager_title')}</h2>
-        </div>
-        <div className="prose dark:prose-invert text-slate-600 dark:text-slate-300">
-          <p>{t('help_manager_desc')}</p>
-          <div className="bg-slate-50 dark:bg-slate-800 p-4 rounded-xl space-y-3 mt-2 border border-slate-200 dark:border-slate-700">
-            <h3 className="font-bold flex items-center gap-2">
-              <MousePointer2 size={16} />
-              {t('help_manager_interactions')}
-            </h3>
-            <ul className="list-disc pl-5 text-sm space-y-1">
-              <li>{t('help_manager_lclick')}</li>
-              <li>{t('help_manager_rclick')}</li>
-              <li>{t('help_manager_rclick_station')}</li>
-              <li>{t('help_manager_empty')}</li>
+        {/* 2. Manager */}
+        <details className="group glass-card rounded-2xl p-4 open:bg-white dark:open:bg-slate-800 transition-all">
+          <summary className="flex items-center gap-3 cursor-pointer font-bold text-lg text-slate-800 dark:text-white list-none">
+            <Database size={24} className="text-anydesk group-open:rotate-12 transition-transform" />
+            <span className="flex-1">{t('help_nav_manager')}</span>
+            <span className="text-slate-400 text-sm group-open:rotate-180 transition-transform">▼</span>
+          </summary>
+          <div className="mt-4 pl-9 space-y-4 text-slate-600 dark:text-slate-300 animate-in slide-in-from-top-2">
+            <p>{t('help_full_manager')}</p>
+            <div className="bg-slate-50 dark:bg-slate-900/50 p-4 rounded-xl text-sm border border-slate-200 dark:border-slate-700">
+              <h3 className="font-bold mb-2 flex items-center gap-2"><MousePointer2 size={16} /> {t('help_manager_interactions')}</h3>
+              <ul className="list-disc pl-5 space-y-1">
+                <li>{t('help_manager_lclick')}</li>
+                <li>{t('help_manager_rclick')}</li>
+                <li>{t('help_manager_rclick_station')}</li>
+              </ul>
+            </div>
+            <a href="/manager" className="inline-block text-sm text-blue-500 hover:underline font-medium">
+              {t('Go to Manager')} →
+            </a>
+          </div>
+        </details>
+
+        {/* 3. Cards */}
+        <details className="group glass-card rounded-2xl p-4 open:bg-white dark:open:bg-slate-800 transition-all">
+          <summary className="flex items-center gap-3 cursor-pointer font-bold text-lg text-slate-800 dark:text-white list-none">
+            <MonitorPlay size={24} className="text-anydesk group-open:rotate-12 transition-transform" />
+            <span className="flex-1">{t('help_cards_title')}</span>
+            <span className="text-slate-400 text-sm group-open:rotate-180 transition-transform">▼</span>
+          </summary>
+          <div className="mt-4 pl-9 space-y-4 text-slate-600 dark:text-slate-300 animate-in slide-in-from-top-2">
+            <p>{t('help_cards_desc')}</p>
+            <ul className="list-disc pl-5 space-y-2 mt-2">
+              <li className="flex items-center gap-2">
+                <span className="bg-anydesk text-white px-2 py-1 rounded text-xs font-bold text-center min-w-[60px]">{t('launch')}</span>
+                {t('help_cards_launch')}
+              </li>
+              <li className="flex items-center gap-2">
+                <span className="bg-slate-200 dark:bg-slate-700 px-2 py-1 rounded text-xs"><Key size={12} /></span>
+                {t('help_cards_key')}
+              </li>
             </ul>
           </div>
-        </div>
-      </section>
+        </details>
 
-      {/* 3. Cards */}
-      <section className="space-y-4">
-        <div className="flex items-center gap-3 text-anydesk border-b border-slate-200 dark:border-slate-700 pb-2">
-          <MonitorPlay size={24} />
-          <h2 className="text-xl font-bold">{t('help_cards_title')}</h2>
-        </div>
-        <div className="prose dark:prose-invert text-slate-600 dark:text-slate-300">
-          <p>{t('help_cards_desc')}</p>
-          <ul className="list-disc pl-5 space-y-2 mt-2">
-            <li className="flex items-center gap-2">
-              <span className="bg-anydesk text-white px-2 py-1 rounded text-xs font-bold text-center min-w-[60px]">{t('launch')}</span>
-              {t('help_cards_launch')}
-            </li>
-            <li className="flex items-center gap-2">
-              <span className="bg-slate-200 dark:bg-slate-700 px-2 py-1 rounded text-xs"><Key size={12} /></span>
-              {t('help_cards_key')}
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      {/* 4. Settings */}
-      <section className="space-y-4">
-        <div className="flex items-center gap-3 text-anydesk border-b border-slate-200 dark:border-slate-700 pb-2">
-          <Settings size={24} />
-          <h2 className="text-xl font-bold">{t('help_settings_title')}</h2>
-        </div>
-        <div className="prose dark:prose-invert text-slate-600 dark:text-slate-300">
-          <ul className="list-disc pl-5 space-y-2 mt-2">
-            <li>{t('help_settings_appearance')}</li>
-            <li>{t('help_settings_pwa')}</li>
-            <li>
-              {t('help_settings_data')}
-              <span className="flex items-center gap-1 mt-1 text-sm bg-yellow-50 dark:bg-yellow-900/20 text-yellow-700 dark:text-yellow-400 p-2 rounded">
-                <ShieldCheck size={16} />
-                {t('password')} & {t('Encrypted Backup')}
-              </span>
-            </li>
-          </ul>
-        </div>
-      </section>
+        {/* 4. Settings */}
+        <details className="group glass-card rounded-2xl p-4 open:bg-white dark:open:bg-slate-800 transition-all">
+          <summary className="flex items-center gap-3 cursor-pointer font-bold text-lg text-slate-800 dark:text-white list-none">
+            <Settings size={24} className="text-anydesk group-open:rotate-12 transition-transform" />
+            <span className="flex-1">{t('help_nav_settings')}</span>
+            <span className="text-slate-400 text-sm group-open:rotate-180 transition-transform">▼</span>
+          </summary>
+          <div className="mt-4 pl-9 space-y-4 text-slate-600 dark:text-slate-300 animate-in slide-in-from-top-2">
+            <p>{t('help_full_settings')}</p>
+            <div className="flex items-center gap-2 text-sm bg-yellow-50 dark:bg-yellow-900/20 text-yellow-700 dark:text-yellow-400 p-3 rounded-lg border border-yellow-100 dark:border-yellow-900/30">
+              <ShieldCheck size={16} />
+              <span>{t('password')} & {t('Encrypted Backup')}</span>
+            </div>
+            <a href="/settings" className="inline-block text-sm text-blue-500 hover:underline font-medium">
+              {t('Go to Settings')} →
+            </a>
+          </div>
+        </details>
+      </div>
 
       {/* 5. Tutorial Game */}
       <section className="space-y-4 pt-8 border-t-2 border-dashed border-slate-200 dark:border-slate-800">

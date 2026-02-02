@@ -158,7 +158,27 @@ i18n
           "Great Job! The office is organized!": "Great Job! The office is organized!",
           "tutorial_confirm_backup": "This will BACKUP your current data internally and replace it with the Tutorial dataset. Are you sure?",
           "tutorial_loaded": "Tutorial Loaded! Go to Manager view and fix the mess!",
-          "tutorial_failed": "Failed to start tutorial."
+          "tutorial_failed": "Failed to start tutorial.",
+
+          // Security Modal Info
+          "security_info_title": "Why is this needed?",
+          "security_info_1": "SvakiSto treats your data seriously. We use this password to encrypt your entire database before it leaves this browser.",
+          "security_info_2": "Without this, anyone with your backup file could see your AnyDesk IDs and Passwords in plain text.",
+          "security_info_3": "Once set, you can explore the app freely! You'll manage your connections, export backups, and organize your workspace securely.",
+          "security_greet_title": "Welcome to SvakiSto!",
+          "security_greet_desc": "Let's secure your workspace before we begin.",
+          "Back": "Back",
+
+          // Help Page Extended
+          "help_nav_dashboard": "Dashboard & Navigation",
+          "help_nav_manager": "File Manager",
+          "help_nav_settings": "Settings & Security",
+          "help_full_dashboard": "Your mission control. Quickly access frequent stations, search universally across all clients and objects, and see what you worked on last.",
+          "help_full_manager": "A desktop-class file explorer. Right-click to create, edit, or delete items. Drag and drop to organize. Use the toolbar for bulk actions.",
+          "help_full_settings": "Control your experience. Switch themes, languages, and most importantly - manage your data backups. Encrypted exports depend on your Master Password.",
+          "Go to Dashboard": "Go to Dashboard",
+          "Go to Manager": "Go to Manager",
+          "Go to Settings": "Go to Settings"
         }
       },
       sr: {
@@ -307,7 +327,27 @@ i18n
           "Great Job! The office is organized!": "Odličan posao! Kancelarija je organizovana!",
           "tutorial_confirm_backup": "Ovo će napraviti INTERNU KOPIJU vaših trenutnih podataka i zameniti ih Tutorijal podacima. Da li ste sigurni?",
           "tutorial_loaded": "Tutorijal učitan! Idite u Menadžer pregled i sredite haos!",
-          "tutorial_failed": "Neuspešno pokretanje tutorijala."
+          "tutorial_failed": "Neuspešno pokretanje tutorijala.",
+
+          // Security Modal Info SR
+          "security_info_title": "Zašto je ovo potrebno?",
+          "security_info_1": "SvakiSto ozbiljno shvata vaše podatke. Ovu lozinku koristimo za šifrovanje cele baze pre nego što napusti ovaj pretraživač.",
+          "security_info_2": "Bez ovoga, svako ko ima vaš backup fajl mogao bi da vidi vase AnyDesk ID-eve i lozinke u čistom tekstu.",
+          "security_info_3": "Kada postavite, slobodno istražujte aplikaciju! Upravljajte konekcijama, izvozite kopije i organizujte svoj radni prostor bezbedno.",
+          "security_greet_title": "Dobrodošli u SvakiSto!",
+          "security_greet_desc": "Hajde da osiguramo vaš radni prostor pre nego što počnemo.",
+          "Back": "Nazad",
+
+          // Help Page Extended SR
+          "help_nav_dashboard": "Komandna tabla i Navigacija",
+          "help_nav_manager": "Menadžer fajlova",
+          "help_nav_settings": "Podešavanja i Bezbednost",
+          "help_full_dashboard": "Vaš kontrolni centar. Brz pristup čestim stanicama, univerzalna pretraga kroz sve klijente i objekte, i pregled onoga na čemu ste poslednje radili.",
+          "help_full_manager": "Fajl eksplorer desktop klase. Desni klik za kreiranje, izmenu ili brisanje. Prevucite i pustite za organizaciju. Koristite alatnu traku za masovne akcije.",
+          "help_full_settings": "Kontrolišite svoje iskustvo. Menjajte teme, jezike i najvažnije - upravljajte rezervnim kopijama. Šifrovani izvozi zavise od vaše Master lozinke.",
+          "Go to Dashboard": "Idi na Tablu",
+          "Go to Manager": "Idi na Menadžer",
+          "Go to Settings": "Idi na Podešavanja"
         }
       }
     }
