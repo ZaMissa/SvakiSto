@@ -110,9 +110,15 @@ export default function Layout() {
       <BiometricPromoModal />
       {/* Desktop Sidebar */}
       <aside className="hidden md:flex flex-col w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-700 p-4">
-        <div className="mb-8 flex items-center gap-2 text-anydesk font-bold text-xl">
+        <div className="mb-8 flex items-center gap-2 text-anydesk font-bold text-xl relative">
           <Database size={28} />
           <span>SvakiSto</span>
+          {hasUnseenUpdate && (
+            <span className="absolute -top-1 -right-2 flex h-3 w-3">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
+            </span>
+          )}
         </div>
         <nav className="space-y-2 flex-1">
           {navItems.map((item) => (
@@ -146,7 +152,15 @@ export default function Layout() {
       >
         <div className="md:hidden h-16 bg-anydesk text-white flex items-center px-4 sticky top-0 z-50 shadow-md">
           <Database size={24} className="mr-2" />
-          <h1 className="font-bold text-lg">SvakiSto</h1>
+          <h1 className="font-bold text-lg relative">
+            SvakiSto
+            {hasUnseenUpdate && (
+              <span className="absolute -top-1 -right-3 flex h-2.5 w-2.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500 border border-white"></span>
+              </span>
+            )}
+          </h1>
         </div>
 
         <div className="flex-1 p-4 md:p-8 overflow-y-auto">
