@@ -11,7 +11,7 @@ interface DataManagementProps {
 
 export const DataManagement: React.FC<DataManagementProps> = ({ appVersion }) => {
   const { t } = useTranslation();
-  const [password, setPassword] = useState('');
+  const [password, setPassword] = useState(() => localStorage.getItem('default_backup_password') || '');
   const [filename, setFilename] = useState('svakisto_backup');
 
   // Import States
@@ -115,6 +115,15 @@ export const DataManagement: React.FC<DataManagementProps> = ({ appVersion }) =>
     setImportContent(null);
   };
 
+  const handleUpdateDefaultPassword = () => {
+    const newPass = prompt(t("Enter new default backup password:"), localStorage.getItem('default_backup_password') || '');
+    if (newPass) { // If not cancelled
+      localStorage.setItem('default_backup_password', newPass);
+      setPassword(newPass); // Update current field too
+      alert(t("Default password updated!"));
+    }
+  };
+
   return (
     <>
       <section className="glass-card p-6 rounded-2xl space-y-4">
@@ -133,7 +142,12 @@ export const DataManagement: React.FC<DataManagementProps> = ({ appVersion }) =>
               />
             </div>
             <div className="flex-1">
-              <label className="block text-sm text-slate-500 mb-1">Password (Optional)</label>
+              <div className="flex justify-between items-center mb-1">
+                <label className="block text-sm text-slate-500">Password</label>
+                <button onClick={handleUpdateDefaultPassword} className="text-xs text-blue-500 hover:underline">
+                  {t('Change Default')}
+                </button>
+              </div>
               <input
                 type="password"
                 placeholder={t("Set a password for the export...")}
