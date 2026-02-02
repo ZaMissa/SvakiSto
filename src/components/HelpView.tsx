@@ -13,7 +13,8 @@ import {
   Play,
   CheckCircle2,
   AlertTriangle,
-  Smartphone
+  Smartphone,
+  Activity
 } from 'lucide-react';
 import { TUTORIAL_DATA, checkTutorialSolution } from '../data/tutorialData';
 import { db } from '../db/db';
@@ -137,6 +138,10 @@ export default function HelpView() {
               <li className="flex items-center gap-2">
                 <span className="bg-slate-200 dark:bg-slate-700 px-2 py-1 rounded text-xs"><Key size={12} /></span>
                 {t('help_cards_key')}
+              </li>
+              <li className="flex items-center gap-2">
+                <span className="bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 px-2 py-1 rounded text-xs"><Activity size={12} /></span>
+                {t('help_cards_stats')}
               </li>
             </ul>
           </div>

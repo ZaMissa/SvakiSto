@@ -102,10 +102,11 @@ i18n
           "help_manager_rclick_station": "Right Click / Long Press (Station): Launch or Copy Password.",
           "help_manager_empty": "Empty Folders: Click or Tap 'Add New...' inside to populate.",
 
-          "help_cards_title": "Station Cards",
-          "help_cards_desc": "Smart cards with quick actions:",
-          "help_cards_launch": "Launch: Copies password & opens AnyDesk.",
-          "help_cards_key": "Key Icon: Manually copies password.",
+          "help_cards_title": "Station Cards & Action Panel",
+          "help_cards_desc": "Clicking a station opens the Action Panel:",
+          "help_cards_launch": "Launch: One-click connection! Copies password automatically & opens AnyDesk.",
+          "help_cards_key": "Password Tools: Toggle visibility (Eye icon) or manually copy.",
+          "help_cards_stats": "Stats: Track how often and when you last connected to each station.",
 
           "help_settings_title": "Settings",
           "help_settings_appearance": "Appearance: Toggle Dark/Light mode and Language.",
@@ -276,10 +277,11 @@ i18n
           "help_manager_rclick_station": "Desni klik / Dugi pritisak (Stanica): Pokreni ili Kopiraj lozinku.",
           "help_manager_empty": "Prazni folderi: Kliknite ili dodirnite 'Dodaj...' unutar foldera.",
 
-          "help_cards_title": "Kartice Stanica",
-          "help_cards_desc": "Pametne kartice sa brzim akcijama:",
-          "help_cards_launch": "Pokreni: Kopira lozinku i otvara AnyDesk.",
-          "help_cards_key": "Ključ: Ručno kopira lozinku.",
+          "help_cards_title": "Kartice Stanica i Panel Akcija",
+          "help_cards_desc": "Klik na stanicu otvara Panel Akcija:",
+          "help_cards_launch": "Pokreni: Konekcija jednim klikom! Automatski kopira lozinku i otvara AnyDesk.",
+          "help_cards_key": "Alati za Lozinke: Prikaži/Sakrij (Oko) ili ručno kopiraj.",
+          "help_cards_stats": "Statistika: Pratite koliko često i kada ste se poslednji put povezali.",
 
           "help_settings_title": "Podešavanja",
           "help_settings_appearance": "Izgled: Promena teme i jezika.",
